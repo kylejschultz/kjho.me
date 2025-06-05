@@ -2,13 +2,16 @@
 <table align="center" border="0">
   <tr>
     <td><img src="./logo_transparent.png" alt="Home Kubernetes Logo" width="150"/></td>
-    <td><h1>KJHo.me - A GitOps Kubernetes HomeLab</h1></td>
+    <td><h1 align="center">KJHo.me</h1>
+          <i>A GitOps Kubernetes HomeLab</i></td>
   </tr>
 </table>
 <hr>
+
 This repo acts as the source of truth for my HomeLab, running on a set of NUCs along with a worker node VM.
 
 The lab consists of:
+
 - **Intel NUCs (x3)**:
     - **nuc1**: 2 Cores, 32GB RAM, 512GB SSD
     - **nuc2**: 2 Cores, 16GB RAM, 512GB SSD

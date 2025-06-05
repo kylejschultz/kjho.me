@@ -1,12 +1,6 @@
+<p align="center"><img src="./logo_transparent.png" alt="Home Kubernetes Logo" width="300"/></p>
 
-<table align="center" border="0">
-  <tr>
-    <td><img src="./logo_transparent.png" alt="Home Kubernetes Logo" width="150"/></td>
-    <td><h1 align="center">KJHo.me</h1>
-          <i>A GitOps Kubernetes HomeLab</i></td>
-  </tr>
-</table>
-<hr>
+# KJHo.me: *A Declarative Kubernetes Homelab*
 
 This repo acts as the source of truth for my HomeLab, running on a set of NUCs along with a worker node VM.
 

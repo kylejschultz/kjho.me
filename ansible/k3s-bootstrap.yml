@@ -1,0 +1,80 @@
+---
+- name: Install and configure k3s cluster with proper internal and external access
+  hosts: all
+  become: yes
+  vars:
+    k3s_server_node: nuc1
+    k3s_server_ip: 192.168.86.221
+    kubeconfig_local_path: "{{ lookup('env', 'HOME') }}/kjho.me/assets/kubeconfig"
+  tasks:
+    - name: Set internal_ip fact for each node
+      set_fact:
+        internal_ip: "{{ hostvars[inventory_hostname]['internal_ip'] }}"
+
+    - name: Install k3s server (control-plane) on nuc1
+      shell: |
+        curl -sfL https://get.k3s.io | \
+        INSTALL_K3S_EXEC="--write-kubeconfig-mode 644 \
+          --advertise-address {{ internal_ip }} \
+          --tls-san {{ internal_ip }} \
+          --tls-san {{ k3s_server_ip }} \
+          --node-ip {{ internal_ip }} \
+          --node-external-ip {{ k3s_server_ip }}" \
+        sh -
+      when: inventory_hostname == k3s_server_node
+
+    - name: Wait for k3s token file to exist (control-plane)
+      wait_for:
+        path: /var/lib/rancher/k3s/server/node-token
+        timeout: 60
+      when: inventory_hostname == k3s_server_node
+
+    - name: Get k3s token from nuc1 (run-once)
+      slurp:
+        src: /var/lib/rancher/k3s/server/node-token
+      register: k3s_token_raw
+      delegate_to: "{{ k3s_server_node }}"
+      run_once: true
+
+    - name: Set k3s_token fact (run-once)
+      set_fact:
+        k3s_token: "{{ k3s_token_raw['content'] | b64decode | trim }}"
+      run_once: true
+
+    - name: Install k3s agent on worker nodes
+      shell: |
+        curl -sfL https://get.k3s.io | \
+        K3S_URL="https://{{ hostvars[k3s_server_node]['internal_ip'] }}:6443" \
+        K3S_TOKEN="{{ k3s_token }}" \
+        INSTALL_K3S_EXEC="--node-ip {{ internal_ip }} --node-name {{ inventory_hostname }}" \
+        sh -
+      when: inventory_hostname != k3s_server_node
+
+    - name: Label and taint nodes from control-plane
+      shell: |
+        kubectl label node {{ item.name }} {{ item.label }} --overwrite
+        {% if item.taint is defined %}kubectl taint node {{ item.name }} {{ item.taint }} --overwrite{% endif %}
+      loop:
+        - { name: "nuc1", label: "role=control-plane" }
+        - { name: "nuc2", label: "role=worker" }
+        - { name: "nuc3", label: "role=worker" }
+        - { name: "nucx", label: "role=storage workload=heavy", taint: "workload=heavy:NoSchedule" }
+      run_once: true
+      delegate_to: "{{ k3s_server_node }}"
+
+    - name: Fetch kubeconfig from control-plane
+      fetch:
+        src: /etc/rancher/k3s/k3s.yaml
+        dest: "{{ kubeconfig_local_path }}"
+        flat: yes
+      delegate_to: "{{ k3s_server_node }}"
+      when: inventory_hostname == k3s_server_node
+
+    - name: Patch kubeconfig for local use (replace localhost with appropriate IPs)
+      replace:
+        path: "{{ kubeconfig_local_path }}"
+        regexp: '127\.0\.0\.1:6443'
+        replace: "{{ k3s_server_ip }}:6443"
+      delegate_to: localhost
+      when: inventory_hostname == k3s_server_node
+      become: false

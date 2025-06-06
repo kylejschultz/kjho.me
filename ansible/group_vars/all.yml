@@ -1,0 +1,17 @@
+k3s_version: v1.33.1+k3s1
+k3s_become: true
+
+# Disable default ingress controller
+k3s_server_args:
+  - "--disable=traefik"
+  - "--advertise-address=10.10.10.1"
+  - "--tls-san=10.10.10.1"
+  - "--tls-san=192.168.86.221"
+  - "--node-ip=10.10.10.1"
+  - "--node-external-ip=192.168.86.221"
+
+# Install Helm (you’ll use this with Flux or Argo)
+install_helm: true
+
+# Optional but useful:
+generate_node_certs: true  # helps with agent-node joins

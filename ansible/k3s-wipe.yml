@@ -1,0 +1,64 @@
+
+
+---
+- name: Wipe all k3s components from nodes
+  hosts: all
+  become: true
+  tasks:
+    - name: Run k3s server uninstall script if exists
+      ansible.builtin.shell: |
+        if [ -f /usr/local/bin/k3s-uninstall.sh ]; then
+          /usr/local/bin/k3s-uninstall.sh
+        fi
+      args:
+        executable: /bin/bash
+
+    - name: Run k3s agent uninstall script if exists
+      ansible.builtin.shell: |
+        if [ -f /usr/local/bin/k3s-agent-uninstall.sh ]; then
+          /usr/local/bin/k3s-agent-uninstall.sh
+        fi
+      args:
+        executable: /bin/bash
+
+    - name: Remove residual k3s directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /etc/rancher
+        - /var/lib/rancher
+        - /var/lib/kubelet
+        - /run/k3s
+        - /run/flannel
+        - /var/lib/cni/
+
+    - name: Remove CNI network interfaces
+      ansible.builtin.shell: |
+        ip link delete cni0 || true
+        ip link delete flannel.1 || true
+        ip link delete kube-ipvs0 || true
+        ip link delete flannel-wg || true
+        ip link delete flannel-wg-v6 || true
+      ignore_errors: true
+
+    - name: Clean iptables rules related to k3s
+      ansible.builtin.shell: |
+        iptables-save | grep -v KUBE- | grep -v CNI- | grep -iv flannel | iptables-restore
+        ip6tables-save | grep -v KUBE- | grep -v CNI- | grep -iv flannel | ip6tables-restore
+      args:
+        executable: /bin/bash
+      ignore_errors: true
+
+    - name: Remove leftover binaries
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /usr/local/bin/k3s
+        - /usr/local/bin/kubectl
+        - /usr/local/bin/ctr
+        - /usr/local/bin/crictl
+        - /usr/local/bin/k3s-killall.sh
+        - /usr/local/bin/k3s-uninstall.sh
+        - /usr/local/bin/k3s-agent-uninstall.sh

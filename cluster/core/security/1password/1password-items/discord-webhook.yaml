@@ -4,4 +4,4 @@ metadata:
   name: discord-webhook
   namespace: 1password
 spec:
-  itemPath: "vaults/kjho.me/items/discordWebhook"
+  itemPath: "vaults/kjho.me/items/discord-webhook"

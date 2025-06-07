@@ -2,5 +2,6 @@ apiVersion: onepassword.com/v1
 kind: OnePasswordItem
 metadata:
   name: discord-webhook
+  namespace: 1password
 spec:
   itemPath: "vaults/kjho.me/items/discordWebhook"

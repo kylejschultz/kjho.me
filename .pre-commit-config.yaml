@@ -6,7 +6,6 @@ repos:
       - id: check-executables-have-shebangs
       - id: check-merge-conflict
       - id: detect-private-key
-      - id: check-yaml
       - id: end-of-file-fixer
       - id: fix-byte-order-marker
       - id: pretty-format-json
@@ -31,3 +30,8 @@ repos:
     -   id: detect-secrets
         args: ['--baseline', '.secrets.baseline']
         exclude: package.lock.json
+
+  - repo: https://github.com/red-lichtie/sops-pre-commit-hook
+    rev: v1.2.1
+    hooks:
+      - id: sops-pre-commit-hook

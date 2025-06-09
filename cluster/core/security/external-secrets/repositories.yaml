@@ -14,4 +14,6 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m
+  ref:
+    tag: latest
   url: https://github.com/external-secrets/external-secrets

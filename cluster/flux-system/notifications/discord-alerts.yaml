@@ -1,7 +1,7 @@
 apiVersion: notification.toolkit.fluxcd.io/v1beta2
 kind: Alert
 metadata:
-  name: discord-notif
+  name: discord-alert
   namespace: flux-system
 spec:
   summary: "k3s cluster"

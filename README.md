@@ -4,6 +4,10 @@
 
 This repo acts as the source of truth for my HomeLab, running on a set of NUCs along with a worker node VM.
 
+## Current Deployment
+- Flux for GitOps automation
+
+## Hardware
 The lab consists of:
 
 - **Intel NUCs (x3)**:

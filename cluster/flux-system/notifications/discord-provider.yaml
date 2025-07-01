@@ -7,3 +7,4 @@ spec:
   type: discord
   secretRef:
     name: discord-webhook-url
+    key: discord-webhook

@@ -1,10 +1,11 @@
-apiVersion: notification.toolkit.fluxcd.io/v1beta2
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
 kind: Alert
 metadata:
   name: discord-alert
   namespace: flux-system
 spec:
-  summary: "k3s cluster"
+  eventMetadata:
+    cluster: "kjho.me"
   providerRef:
     name: discord
   eventSeverity: info
@@ -12,4 +13,8 @@ spec:
     - kind: GitRepository
       name: '*'
     - kind: Kustomization
+      name: '*'
+    - kind: HelmRelease
+      name: '*'
+    - kind: HelmRepository
       name: '*'

@@ -5,3 +5,4 @@ resources:
 - gotk-sync.yaml
 - notifications/discord-provider.yaml
 - notifications/discord-alerts.yaml
+- notifications/discord-webhook-secret.yaml

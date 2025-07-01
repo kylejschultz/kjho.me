@@ -6,4 +6,4 @@ metadata:
 spec:
   type: discord
   secretRef:
-    name: discord-webhook
+    name: discord-webhook-url

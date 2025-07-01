@@ -18,15 +18,3 @@ spec:
       name: '*'
     - kind: HelmRepository
       name: '*'
-    - kind: Secret
-      name: '*'
-    - kind: Namespace
-      name: '*'
-    - kind: ExternalSecret
-      name: '*'
-    - kind: ClusterSecretStore
-      name: '*'
-    - kind: Alert
-      name: '*'
-    - kind: Provider
-      name: '*'

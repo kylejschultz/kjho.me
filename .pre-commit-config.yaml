@@ -23,8 +23,3 @@ repos:
       - id: k8svalidate
         args: [--exclude, "**/*.patch.yaml"]
         files: .yaml$
-
-  - repo: https://github.com/red-lichtie/sops-pre-commit-hook
-    rev: v1.2.1
-    hooks:
-      - id: sops-pre-commit-hook

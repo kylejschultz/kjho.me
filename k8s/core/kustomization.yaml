@@ -1,6 +1,15 @@
-# kustomization.yaml
-apiVersion: kustomize.config.k8s.io/v1beta1
+apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
-resources:
-  - external-secrets/
-  - notifications/
+metadata:
+  name: core
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: ./k8s/core
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  dependsOn:
+    - name: external-secrets

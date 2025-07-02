@@ -1,13 +1,3 @@
-# helmrepository.yaml
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: external-secrets
-  namespace: external-secrets
-spec:
-  url: https://charts.external-secrets.io
-  interval: 10m
----
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:

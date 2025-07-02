@@ -3,3 +3,6 @@ kind: Kustomization
 resources:
   - external-secrets/
   - notifications/
+
+generators:
+  - external-secrets/onepassword-token.yaml

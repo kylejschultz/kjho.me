@@ -5,4 +5,4 @@ resources:
   - helmrepository.yaml
   - helmrelease.yaml
   - onepassword-secretstore.yaml
-  - 1password-token.yaml
+  - onepassword-token.yaml

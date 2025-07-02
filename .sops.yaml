@@ -1,0 +1,4 @@
+creation_rules:
+  - path_regex: k8s/core/external-secrets/onepassword-token.yaml
+    encrypted_regex: '^(data|stringData)$'
+    age: age1d2z7rsrjtr89pk5jam8l0q6dn3yklpleug53ztdxv6aa9ua6fdjq3lfxyy

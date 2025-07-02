@@ -7,3 +7,14 @@ metadata:
 spec:
   url: https://charts.external-secrets.io
   interval: 10m
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: external-secrets
+  namespace: flux-system
+spec:
+  interval: 10m
+  ref:
+    branch: main
+  url: http://github.com/external-secrets/external-secrets

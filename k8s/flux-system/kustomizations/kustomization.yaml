@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - core.yaml
   - external-secrets.yaml
+  - external-secrets-crds.yaml

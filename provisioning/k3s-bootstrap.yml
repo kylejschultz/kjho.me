@@ -1,4 +1,3 @@
----
 - name: Install and configure k3s cluster with proper internal and external access
   hosts: all
   become: yes
@@ -78,3 +77,21 @@
       delegate_to: localhost
       when: inventory_hostname == k3s_server_node
       become: false
+
+    - name: Install Flux CLI on control-plane
+      ansible.builtin.shell: |
+        curl -s https://fluxcd.io/install.sh | sudo bash
+      when: inventory_hostname == k3s_server_node
+
+    - name: Bootstrap Flux to GitHub
+      ansible.builtin.shell: |
+        export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+        flux bootstrap github \
+          --owner=kylejschultz \
+          --repository=kjho.me \
+          --branch=main \
+          --path=k8s/flux-system \
+          --personal
+      environment:
+        GITHUB_TOKEN: "{{ lookup('env', 'GITHUB_PAT') }}"
+      when: inventory_hostname == k3s_server_node

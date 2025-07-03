@@ -83,6 +83,13 @@
         curl -s https://fluxcd.io/install.sh | sudo bash
       when: inventory_hostname == k3s_server_node
 
+    - name: Apply local 1Password token secret
+      kubernetes.core.k8s:
+        state: present
+        src: "{{ lookup('env', 'HOME') }}/kjho.me/assets/onepassword-token.yaml"
+      when: inventory_hostname == k3s_server_node
+
+
     - name: Bootstrap Flux to GitHub
       ansible.builtin.shell: |
         export KUBECONFIG=/etc/rancher/k3s/k3s.yaml

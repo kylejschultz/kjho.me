@@ -4,7 +4,7 @@ metadata:
   name: core
   namespace: flux-system
 spec:
-  interval: 5m0s
+  interval: 10m0s
   path: ./k8s/core
   prune: true
   sourceRef:

@@ -24,6 +24,9 @@ spec:
           nodePort: 30080
         websecure:
           nodePort: 30443
+    api:
+      dashboard: true
+      insecure: false
     ingressRoute:
       dashboard:
         enabled: true

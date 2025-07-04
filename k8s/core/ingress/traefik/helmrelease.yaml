@@ -21,7 +21,7 @@ spec:
       type: NodePort
     api:
       dashboard: true
-      insecure: false
+      insecure: true
     ingressRoute:
       dashboard:
         enabled: false

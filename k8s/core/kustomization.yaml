@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - notifications/
   - ingress/traefik/
+  - ingress/cert-manager/

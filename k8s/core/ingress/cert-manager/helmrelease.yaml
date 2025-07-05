@@ -14,8 +14,8 @@ spec:
         name: cert-manager
         namespace: cert-manager
   interval: 30m
-  install:
-    crds: CreateReplace
   values:
+    crds:
+      enabled: true
     prometheus:
       enabled: false

@@ -13,7 +13,6 @@ spec:
     - dns01:
         cloudflare:
           email: kyle@kjschultz.com
-          zone: kjho.me
           apiTokenSecretRef:
             name: cloudflare-cert-token
             key: cf-token

@@ -12,7 +12,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: cert-manager
-        namespace: flux-system
+        namespace: cert-manager
   interval: 30m
   install:
     crds: CreateReplace

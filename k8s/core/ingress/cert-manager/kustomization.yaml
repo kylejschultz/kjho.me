@@ -3,4 +3,5 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - cloudflare-cert-token.yaml
+  - clusterissuer-cloudflare.yaml
   - helmrelease.yaml

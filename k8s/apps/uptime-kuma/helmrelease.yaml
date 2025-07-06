@@ -1,0 +1,29 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: uptime-kuma
+  namespace: uptime-kuma
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: uptime-kuma
+      version: "*"
+      sourceRef:
+        kind: HelmRepository
+        name: uptime-kuma
+        namespace: uptime-kuma
+  values:
+    persistence:
+      enabled: true
+      storageClass: openebs-hostpath
+      size: 10Gi
+    ingress:
+      enabled: true
+      ingressClassName: traefik
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+      hosts:
+        - uptime.kjho.me
+      tls:
+        - secretName: uptime-kuma-tls

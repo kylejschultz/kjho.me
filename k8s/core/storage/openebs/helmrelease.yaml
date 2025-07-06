@@ -14,10 +14,41 @@ spec:
         name: openebs
         namespace: openebs
   values:
+    # Disable unnecessary components that are causing image pull issues
+    mayastor:
+      enabled: false
+    engines:
+      local:
+        lvm:
+          enabled: false
+        zfs:
+          enabled: false
+      replicated:
+        mayastor:
+          enabled: false
+
+    # Disable observability stack (causing Docker Hub rate limit issues)
+    loki-stack:
+      enabled: false
+    obs:
+      callhome:
+        enabled: false
+
+    # Only enable local path provisioner
     localprovisioner:
+      enabled: true
       basePath: /mnt/data1
       nodeSelector:
         kubernetes.io/hostname: nucx
       hostpathClass:
         name: openebs-hostpath
         isDefaultClass: true
+        reclaimPolicy: Delete
+
+    # Disable other components
+    ndm:
+      enabled: false
+    ndmOperator:
+      enabled: false
+    admissionServer:
+      enabled: false

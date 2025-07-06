@@ -6,6 +6,8 @@ This repo acts as the source of truth for my HomeLab, running on a set of NUCs a
 
 ## Current Deployment
 - Flux for GitOps automation
+- External-Secrets with 1Password Provider for Secret Management
+- Traefik for Ingress
 
 ## Hardware
 The lab consists of:

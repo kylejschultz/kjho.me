@@ -5,3 +5,4 @@ resources:
   - traefik.yaml
   - cert-manager.yaml
   - openebs.yaml
+  - uptime-kuma.yaml

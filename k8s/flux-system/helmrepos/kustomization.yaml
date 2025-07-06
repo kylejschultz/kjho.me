@@ -4,3 +4,4 @@ resources:
   - external-secrets.yaml
   - traefik.yaml
   - cert-manager.yaml
+  - openebs.yaml

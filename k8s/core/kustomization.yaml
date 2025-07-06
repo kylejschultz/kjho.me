@@ -4,3 +4,4 @@ resources:
   - notifications/
   - ingress/traefik/
   - ingress/cert-manager/
+  - storage/

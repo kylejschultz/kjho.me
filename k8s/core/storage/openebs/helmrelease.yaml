@@ -37,13 +37,14 @@ spec:
     # Only enable local path provisioner
     localprovisioner:
       enabled: true
-      basePath: /mnt/data1
-      nodeSelector:
-        kubernetes.io/hostname: nucx
       hostpathClass:
+        enabled: true
         name: openebs-hostpath
         isDefaultClass: true
         reclaimPolicy: Delete
+        basePath: /mnt/data1
+      nodeSelector:
+        kubernetes.io/hostname: nucx
 
     # Disable other components
     ndm:

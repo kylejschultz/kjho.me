@@ -17,11 +17,6 @@ spec:
     domain: kjho.me
     subdomain: auth
 
-    # Force single deployment instead of DaemonSet
-    deployment:
-      kind: Deployment
-      replicas: 1
-
     ingress:
       enabled: true
       className: traefik
@@ -33,6 +28,9 @@ spec:
         secret: auth-kjho-me-tls
 
     pod:
+      # Force single deployment instead of DaemonSet
+      kind: Deployment
+      replicas: 1
       env:
         - name: ADMIN_USERNAME
           valueFrom:

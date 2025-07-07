@@ -91,5 +91,5 @@ spec:
 
     persistence:
       enabled: true
-      storageClass: "openebs-hostpath"
+      storageClass: "longhorn"
       size: 1Gi

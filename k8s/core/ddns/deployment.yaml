@@ -17,34 +17,21 @@ spec:
     spec:
       containers:
       - name: cloudflare-ddns
-        image: oznu/cloudflare-ddns:latest
+        image: favonia/cloudflare-ddns:latest
         imagePullPolicy: Always
         env:
-        - name: API_KEY
+        - name: CF_API_TOKEN
           valueFrom:
             secretKeyRef:
               name: cloudflare-ddns-secret
               key: API_TOKEN
-        - name: ZONE
-          valueFrom:
-            secretKeyRef:
-              name: cloudflare-ddns-secret
-              key: ZONE
-        - name: SUBDOMAIN
+        - name: DOMAINS
           valueFrom:
             secretKeyRef:
               name: cloudflare-ddns-secret
               key: RECORD
-        - name: PROXIED
-          value: "false"
-        - name: RRTYPE
-          value: "A"
-        - name: DELETE_ON_STOP
-          value: "false"
-        - name: INTERFACE
-          value: "eth0"
-        - name: CUSTOM_LOOKUP_CMD
-          value: "curl -s https://ipv4.icanhazip.com"
+        - name: IP6_PROVIDER
+          value: "none"
         resources:
           requests:
             memory: "64Mi"
@@ -57,19 +44,8 @@ spec:
           capabilities:
             drop:
             - ALL
+          readOnlyRootFilesystem: true
           runAsNonRoot: true
-          runAsUser: 1000
-          runAsGroup: 1000
-        volumeMounts:
-        - name: tmp
-          mountPath: /tmp
-        - name: run
-          mountPath: /var/run
+          runAsUser: 65534
+          runAsGroup: 65534
       restartPolicy: Always
-      securityContext:
-        fsGroup: 1000
-      volumes:
-      - name: tmp
-        emptyDir: {}
-      - name: run
-        emptyDir: {}

@@ -5,9 +5,25 @@
 This repo acts as the source of truth for my HomeLab, running on a set of NUCs along with a worker node VM.
 
 ## Current Deployment
-- Flux for GitOps automation
-- External-Secrets with 1Password Provider for Secret Management
-- Traefik for Ingress
+
+This homelab runs a modern Kubernetes stack using GitOps principles:
+
+### Core Infrastructure
+- **FluxCD**: GitOps continuous delivery
+- **External-Secrets**: Secret management with 1Password integration
+- **Traefik**: Ingress controller with automatic HTTPS
+- **cert-manager**: Let's Encrypt certificate automation
+- **OpenEBS**: Container-native storage
+
+### Applications & Services
+- **Uptime Kuma**: Self-hosted monitoring and status page
+- **Cloudflare DDNS**: Dynamic DNS updates for external access
+- **Discord Notifications**: Automated cluster alerts
+
+### Operations
+- All secrets sourced from 1Password
+- Automated certificate management
+- GitOps workflow with validation hooks
 
 ## Hardware
 The lab consists of:

@@ -23,9 +23,15 @@ spec:
       annotations:
         cert-manager.io/cluster-issuer: "cloudflare-issuer"
         traefik.ingress.kubernetes.io/router.tls: "true"
+      hosts:
+        - host: auth.kjho.me
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
       tls:
-        enabled: true
-        secret: auth-kjho-me-tls
+        - hosts:
+            - auth.kjho.me
+          secretName: auth-kjho-me-tls
 
     pod:
       resources:

@@ -17,6 +17,11 @@ spec:
     domain: kjho.me
     subdomain: auth
 
+    # Force single deployment instead of DaemonSet
+    deployment:
+      kind: Deployment
+      replicas: 1
+
     ingress:
       enabled: true
       className: traefik

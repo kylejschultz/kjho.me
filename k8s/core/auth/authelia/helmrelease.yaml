@@ -23,21 +23,9 @@ spec:
       annotations:
         cert-manager.io/cluster-issuer: "cloudflare-issuer"
         traefik.ingress.kubernetes.io/router.tls: "true"
-      rules:
-        - host: "auth.kjho.me"
-          http:
-            paths:
-              - path: "/"
-                pathType: ImplementationSpecific
-                backend:
-                  service:
-                    name: authelia
-                    port:
-                      number: 80
       tls:
-        - hosts:
-            - "auth.kjho.me"
-          secretName: auth-kjho-me-tls
+        enabled: true
+        secret: auth-kjho-me-tls
 
     pod:
       resources:

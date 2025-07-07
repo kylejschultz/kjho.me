@@ -8,13 +8,15 @@ spec:
     - web
     - websecure
   routes:
-    - match: Host(`traefik.localhost`) && PathPrefix(`/dashboard`)
+    - match: Host(`traefik.kjho.me`) && PathPrefix(`/dashboard`)
       kind: Rule
       services:
         - name: api@internal
           kind: TraefikService
-    - match: Host(`traefik.localhost`) && PathPrefix(`/api`)
+    - match: Host(`traefik.kjho.me`) && PathPrefix(`/api`)
       kind: Rule
       services:
         - name: api@internal
           kind: TraefikService
+  tls:
+    secretName: traefik-dashboard-tls

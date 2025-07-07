@@ -1,0 +1,55 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: longhorn
+  namespace: longhorn-system
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: longhorn
+      version: "1.8.1"
+      sourceRef:
+        kind: HelmRepository
+        name: longhorn
+        namespace: flux-system
+  values:
+    defaultSettings:
+      defaultDataPath: /var/lib/longhorn/
+      defaultDataLocality: prefer-local
+      replicaSoftAntiAffinity: false
+      replicaAutoBalance: least-effort
+      storageOverProvisioningPercentage: 100
+      storageMinimalAvailablePercentage: 25
+      upgradeChecker: false
+      defaultReplicaCount: 2
+      guaranteedEngineManagerCPU: 12
+      guaranteedReplicaManagerCPU: 12
+
+    longhornManager:
+      tolerations:
+        - key: workload
+          operator: Equal
+          value: heavy
+          effect: NoSchedule
+
+    longhornDriver:
+      tolerations:
+        - key: workload
+          operator: Equal
+          value: heavy
+          effect: NoSchedule
+
+    service:
+      ui:
+        type: ClusterIP
+
+    ingress:
+      enabled: true
+      ingressClassName: traefik
+      host: longhorn.kjho.me
+      annotations:
+        cert-manager.io/cluster-issuer: "cloudflare-issuer"
+        traefik.ingress.kubernetes.io/router.tls: "true"
+      tls: true
+      tlsSecret: longhorn-kjho-me-tls

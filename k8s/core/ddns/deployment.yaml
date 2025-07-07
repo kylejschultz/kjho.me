@@ -17,21 +17,61 @@ spec:
     spec:
       containers:
       - name: cloudflare-ddns
-        image: favonia/cloudflare-ddns:latest
+        image: curlimages/curl:latest
         imagePullPolicy: Always
+        command: ["/bin/sh"]
+        args:
+        - -c
+        - |
+          while true; do
+            echo "$(date): Checking current IP..."
+            CURRENT_IP=$(curl -s https://ipv4.icanhazip.com)
+            echo "$(date): Current IP is $CURRENT_IP"
+
+            # Get zone ID
+            ZONE_ID=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones?name=$ZONE" \
+              -H "Authorization: Bearer $API_TOKEN" \
+              -H "Content-Type: application/json" | \
+              sed -n 's/.*"id":"\([^"]*\)".*/\1/p' | head -1)
+
+            # Get record ID and current DNS IP
+            RECORD_INFO=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records?name=$RECORD" \
+              -H "Authorization: Bearer $API_TOKEN" \
+              -H "Content-Type: application/json")
+
+            RECORD_ID=$(echo "$RECORD_INFO" | sed -n 's/.*"id":"\([^"]*\)".*/\1/p' | head -1)
+            DNS_IP=$(echo "$RECORD_INFO" | sed -n 's/.*"content":"\([^"]*\)".*/\1/p' | head -1)
+
+            if [ "$CURRENT_IP" != "$DNS_IP" ]; then
+              echo "$(date): IP changed from $DNS_IP to $CURRENT_IP, updating DNS..."
+              curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records/$RECORD_ID" \
+                -H "Authorization: Bearer $API_TOKEN" \
+                -H "Content-Type: application/json" \
+                --data '{"type":"A","name":"'"$RECORD"'","content":"'"$CURRENT_IP"'","ttl":300}'
+              echo "$(date): DNS update completed"
+            else
+              echo "$(date): IP unchanged, no update needed"
+            fi
+
+            echo "$(date): Sleeping for 5 minutes..."
+            sleep 300
+          done
         env:
-        - name: CF_API_TOKEN
+        - name: API_TOKEN
           valueFrom:
             secretKeyRef:
               name: cloudflare-ddns-secret
               key: API_TOKEN
-        - name: DOMAINS
+        - name: ZONE
+          valueFrom:
+            secretKeyRef:
+              name: cloudflare-ddns-secret
+              key: ZONE
+        - name: RECORD
           valueFrom:
             secretKeyRef:
               name: cloudflare-ddns-secret
               key: RECORD
-        - name: IP6_PROVIDER
-          value: "none"
         resources:
           requests:
             memory: "64Mi"
@@ -46,6 +86,6 @@ spec:
             - ALL
           readOnlyRootFilesystem: true
           runAsNonRoot: true
-          runAsUser: 65534
-          runAsGroup: 65534
+          runAsUser: 100
+          runAsGroup: 101
       restartPolicy: Always

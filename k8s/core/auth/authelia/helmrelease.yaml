@@ -28,6 +28,17 @@ spec:
         secret: auth-kjho-me-tls
 
     pod:
+      env:
+        - name: ADMIN_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: authelia-admin-user
+              key: username
+        - name: ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: authelia-admin-user
+              key: password
       resources:
         requests:
           cpu: 50m
@@ -50,6 +61,15 @@ spec:
               parallelism: 4
               key_length: 32
               salt_length: 16
+
+      # User configuration - using credentials from 1Password
+      users:
+        "$env:ADMIN_USERNAME":
+          displayname: "Kyle"
+          password: "$env:ADMIN_PASSWORD"
+          email: "kyle@kjho.me"
+          groups:
+            - admins
 
       session:
         name: authelia_session

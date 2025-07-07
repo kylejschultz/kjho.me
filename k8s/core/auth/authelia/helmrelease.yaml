@@ -15,10 +15,10 @@ spec:
         namespace: flux-system
   values:
     domain: kjho.me
+    subdomain: auth
 
     ingress:
       enabled: true
-      subdomain: auth
       className: traefik
       annotations:
         cert-manager.io/cluster-issuer: "cloudflare-issuer"

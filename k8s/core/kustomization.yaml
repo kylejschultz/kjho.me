@@ -5,3 +5,4 @@ resources:
   - ingress/traefik/
   - ingress/cert-manager/
   - storage/
+  - ddns/

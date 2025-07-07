@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudflare-ddns
+  namespace: ddns
+  labels:
+    app: cloudflare-ddns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloudflare-ddns
+  template:
+    metadata:
+      labels:
+        app: cloudflare-ddns
+    spec:
+      containers:
+      - name: cloudflare-ddns
+        image: oznu/cloudflare-ddns:latest
+        imagePullPolicy: Always
+        env:
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: cloudflare-ddns-secret
+              key: API_TOKEN
+        - name: ZONE
+          valueFrom:
+            secretKeyRef:
+              name: cloudflare-ddns-secret
+              key: ZONE
+        - name: SUBDOMAIN
+          valueFrom:
+            secretKeyRef:
+              name: cloudflare-ddns-secret
+              key: RECORD
+        - name: PROXIED
+          value: "false"
+        - name: RRTYPE
+          value: "A"
+        - name: DELETE_ON_STOP
+          value: "false"
+        - name: INTERFACE
+          value: "eth0"
+        - name: CUSTOM_LOOKUP_CMD
+          value: "curl -s https://ipv4.icanhazip.com"
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
+      restartPolicy: Always
+      securityContext:
+        fsGroup: 1000

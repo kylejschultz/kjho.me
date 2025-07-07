@@ -14,25 +14,17 @@ spec:
         name: authelia
         namespace: flux-system
   values:
-    controller:
-      type: deployment
-      replicas: 1
-
     ingress:
       enabled: true
       className: traefik
       annotations:
         cert-manager.io/cluster-issuer: "cloudflare-issuer"
         traefik.ingress.kubernetes.io/router.tls: "true"
-      hosts:
-        - host: auth.kjho.me
-          paths:
-            - path: /
-              pathType: Prefix
+      subdomain: auth
+      domain: kjho.me
       tls:
-        - hosts:
-            - auth.kjho.me
-          secretName: auth-kjho-me-tls
+        enabled: true
+        secret: auth-kjho-me-tls
 
     pod:
       resources:

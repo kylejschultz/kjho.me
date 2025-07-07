@@ -14,20 +14,12 @@ spec:
         name: authelia
         namespace: flux-system
   values:
-    domain: kjho.me
-    subdomain: auth
-
     ingress:
       enabled: true
       className: traefik
       annotations:
         cert-manager.io/cluster-issuer: "cloudflare-issuer"
         traefik.ingress.kubernetes.io/router.tls: "true"
-      hosts:
-        - host: auth.kjho.me
-          paths:
-            - path: /
-              pathType: ImplementationSpecific
       tls:
         enabled: true
         secret: auth-kjho-me-tls
@@ -58,7 +50,6 @@ spec:
 
       session:
         name: authelia_session
-        domain: kjho.me
         expiration: 1h
         inactivity: 5m
         remember_me: 1M

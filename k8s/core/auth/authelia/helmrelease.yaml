@@ -36,25 +36,55 @@ spec:
           cpu: 200m
           memory: 128Mi
 
-      env:
-        - name: AUTHELIA_AUTHENTICATION_BACKEND_FILE_PASSWORD_KYLE
-          valueFrom:
-            secretKeyRef:
-              name: authelia-admin-user
-              key: password
-
     configMap:
+      authentication_backend:
+        file:
+          enabled: true
+          path: /config/users_database.yml
+          password:
+            algorithm: argon2
+            argon2:
+              variant: argon2id
+              iterations: 3
+              memory: 65536
+              parallelism: 4
+              key_length: 32
+              salt_length: 16
+
       session:
+        name: authelia_session
+        domain: kjho.me
+        expiration: 1h
+        inactivity: 5m
+        remember_me: 1M
+        cookies:
+          - name: authelia_session
+            domain: kjho.me
+            authelia_url: https://auth.kjho.me
         redis:
           enabled: true
           host: redis-master.redis.svc.cluster.local
           port: 6379
+
+      storage:
+        local:
+          enabled: true
+          path: /config/db.sqlite3
+
+      notifier:
+        disable_startup_check: true
+        filesystem:
+          enabled: true
+          filename: /config/notification.txt
 
       access_control:
         default_policy: deny
         rules:
           - domain: "*.kjho.me"
             policy: one_factor
+
+    secret:
+      existingSecret: authelia
 
     persistence:
       enabled: true

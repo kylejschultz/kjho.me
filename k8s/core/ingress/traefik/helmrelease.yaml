@@ -42,18 +42,8 @@ spec:
     ingressClass:
       enabled: true
       isDefaultClass: true
-    hostResolver:
-      cnameFlattening: true
-      resolvConfig: /etc/resolv.conf
-      resolvDepth: 5
-    entryPoints:
-      web:
-        address: ":80"
-        forwardedHeaders:
-          trustedIPs:
-            - "0.0.0.0/0"
-      websecure:
-        address: ":443"
-        forwardedHeaders:
-          trustedIPs:
-            - "0.0.0.0/0"
+    serversTransport:
+      insecureSkipVerify: true
+    global:
+      checkNewVersion: false
+      sendAnonymousUsage: false

@@ -16,15 +16,19 @@ spec:
   values:
     ingress:
       enabled: true
-      className: traefik
+      ingressClassName: traefik
       annotations:
         cert-manager.io/cluster-issuer: "cloudflare-issuer"
         traefik.ingress.kubernetes.io/router.tls: "true"
-      subdomain: auth
-      domain: kjho.me
+      hosts:
+        - host: auth.kjho.me
+          paths:
+            - path: /
+              pathType: Prefix
       tls:
-        enabled: true
-        secret: auth-kjho-me-tls
+        - hosts:
+            - auth.kjho.me
+          secretName: auth-kjho-me-tls
 
     pod:
       resources:

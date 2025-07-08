@@ -35,10 +35,7 @@ spec:
         annotations:
           cert-manager.io/cluster-issuer: letsencrypt-cloudflare
         hosts:
-          - host: auth.kjho.me
-            paths:
-              - path: /
-                pathType: Prefix
+          - auth.kjho.me
         tls:
           - secretName: authentik-tls
             hosts:

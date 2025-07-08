@@ -3,3 +3,4 @@ kind: Kustomization
 namespace: authelia
 resources:
   - helmrelease.yaml
+  - github-oauth-secret.yaml

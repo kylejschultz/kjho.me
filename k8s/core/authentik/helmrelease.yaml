@@ -15,21 +15,21 @@ spec:
         name: authentik
         namespace: flux-system
   values:
-    authentik:
-      ingress:
-        enabled: true
-        ingressClassName: traefik
-        hosts:
-          - host: auth.kjho.me
-            paths:
-              - path: /
-                pathType: Prefix
-        tls:
-          - secretName: authentik-tls
-            hosts:
-              - auth.kjho.me
-        annotations:
-          cert-manager.io/cluster-issuer: "letsencrypt-cloudflare"
+    ingress:
+      enabled: true
+      ingressClassName: traefik
+      hosts:
+        - host: auth.kjho.me
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        - secretName: authentik-tls
+          hosts:
+            - auth.kjho.me
+      annotations:
+        cert-manager.io/cluster-issuer: "letsencrypt-cloudflare"
+    authentik: {}
     redis:
       enabled: false
     postgresql:

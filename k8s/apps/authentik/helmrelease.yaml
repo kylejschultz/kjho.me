@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: authentik
-      version: '2025.6.3'  # Latest version
+      version: '2025.6.3'
       sourceRef:
         kind: HelmRepository
         name: authentik
@@ -18,23 +18,25 @@ spec:
     authentik:
       error_reporting:
         enabled: false
+      secret_key:
+        existingSecret: authentik-secrets
+        key: secret_key
+      postgresql:
+        existingSecret: authentik-secrets
+        key: password
+        host: authentik-postgresql
+      redis:
+        existingSecret: authentik-secrets
+        key: password
+        host: redis.redis.svc.cluster.local
+
+    server:
       env:
         AUTHENTIK_SECRET_KEY:
           valueFrom:
             secretKeyRef:
               name: authentik-secrets
               key: secret_key
-        AUTHENTIK_POSTGRESQL__PASSWORD:
-          valueFrom:
-            secretKeyRef:
-              name: authentik-secrets
-              key: password
-      postgresql:
-        host: authentik-postgresql
-      redis:
-        host: redis.redis.svc.cluster.local
-
-    server:
       ingress:
         enabled: true
         ingressClassName: traefik
@@ -46,6 +48,14 @@ spec:
           - secretName: authentik-tls
             hosts:
               - auth.kjho.me
+
+    worker:
+      env:
+        AUTHENTIK_SECRET_KEY:
+          valueFrom:
+            secretKeyRef:
+              name: authentik-secrets
+              key: secret_key
 
     postgresql:
       enabled: true

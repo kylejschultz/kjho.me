@@ -4,7 +4,6 @@ resources:
   - cert-manager.yaml
   - ddns.yaml
   - external-secrets.yaml
-  - openebs.yaml
   - traefik.yaml
   - uptime-kuma.yaml
   - redis.yaml

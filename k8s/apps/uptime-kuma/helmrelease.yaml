@@ -16,7 +16,7 @@ spec:
   values:
     persistence:
       enabled: true
-      storageClass: openebs-hostpath
+      storageClass: longhorn
       size: 10Gi
     ingress:
       enabled: true

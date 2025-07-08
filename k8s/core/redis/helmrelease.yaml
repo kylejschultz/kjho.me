@@ -20,7 +20,7 @@ spec:
       persistence:
         enabled: true
         size: 1Gi
-        storageClass: "openebs-hostpath"
+      storageClass: longhorn
     replica:
       replicaCount: 0
     metrics:

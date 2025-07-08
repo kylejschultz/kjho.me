@@ -15,7 +15,9 @@ spec:
         namespace: flux-system
   values:
     auth:
-      enabled: false
+      enabled: true
+      existingSecret: redis-secrets
+      existingSecretPasswordKey: redis-password
     master:
       persistence:
         enabled: true

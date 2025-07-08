@@ -32,7 +32,7 @@ spec:
           cert-manager.io/cluster-issuer: "letsencrypt-cloudflare"
     authentik:
       redis:
-        host: redis.database.svc.cluster.local
+        host: redis-master.redis.svc.cluster.local
         port: 6379
     redis:
       enabled: false

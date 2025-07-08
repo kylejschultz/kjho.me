@@ -18,13 +18,18 @@ spec:
     authentik:
       error_reporting:
         enabled: false
-      secret_key:
-        existingSecret: authentik-secrets
-        key: secret_key
+      env:
+        AUTHENTIK_SECRET_KEY:
+          valueFrom:
+            secretKeyRef:
+              name: authentik-secrets
+              key: secret_key
+        AUTHENTIK_POSTGRESQL__PASSWORD:
+          valueFrom:
+            secretKeyRef:
+              name: authentik-secrets
+              key: password
       postgresql:
-        password:
-          existingSecret: authentik-secrets
-          key: password
         host: authentik-postgresql
       redis:
         host: redis.redis.svc.cluster.local

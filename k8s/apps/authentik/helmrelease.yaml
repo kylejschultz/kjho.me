@@ -31,20 +31,21 @@ spec:
         password:
           required: false
 
-    ingress:
-      enabled: true
-      ingressClassName: traefik
-      annotations:
-        cert-manager.io/cluster-issuer: letsencrypt-cloudflare
-      hosts:
-        - host: auth.kjho.me
-          paths:
-            - path: /
-              pathType: Prefix
-      tls:
-        - secretName: authentik-tls
-          hosts:
-            - auth.kjho.me
+    server:
+      ingress:
+        enabled: true
+        ingressClassName: traefik
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+        hosts:
+          - host: auth.kjho.me
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - secretName: authentik-tls
+            hosts:
+              - auth.kjho.me
 
     postgresql:
       enabled: true

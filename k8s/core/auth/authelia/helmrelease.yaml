@@ -1,0 +1,65 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: authelia
+  namespace: authelia
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: authelia
+      version: "0.10.37"
+      sourceRef:
+        kind: HelmRepository
+        name: authelia
+        namespace: flux-system
+  values:
+    pod:
+      kind: Deployment
+      replicas: 1
+
+    ingress:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: "cloudflare-issuer"
+        traefik.ingress.kubernetes.io/router.tls: "true"
+      certManager: true
+      tls:
+        enabled: true
+        secret: auth-kjho-me-tls
+
+    persistence:
+      enabled: true
+      storageClass: "longhorn"
+      size: 1Gi
+
+    configMap:
+      # Session configuration for auth.kjho.me
+      session:
+        cookies:
+          - domain: 'auth.kjho.me'
+            authelia_url: 'https://auth.kjho.me'
+
+      # BYPASS authentication for initial testing
+      authentication_backend:
+        file:
+          enabled: false
+
+      # Simple storage
+      storage:
+        local:
+          enabled: true
+          path: /config/db.sqlite3
+
+      # Simple notifier
+      notifier:
+        filesystem:
+          enabled: true
+          filename: /config/notification.txt
+
+      # BYPASS access control - allow everything for testing
+      access_control:
+        default_policy: bypass
+        rules:
+          - domain: "*.kjho.me"
+            policy: bypass

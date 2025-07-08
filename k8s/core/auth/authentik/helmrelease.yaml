@@ -24,9 +24,8 @@ spec:
       postgresql:
         host: authentik-postgresql
       redis:
-        host: redis.redis.svc.cluster.local
-        password:
-          required: false
+        host: redis-master.redis.svc.cluster.local
+        port: 6379
 
     server:
       ingress:

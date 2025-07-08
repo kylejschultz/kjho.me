@@ -40,10 +40,13 @@ spec:
           - domain: 'auth.kjho.me'
             authelia_url: 'https://auth.kjho.me'
 
-      # BYPASS authentication for initial testing
+      # Minimal file authentication backend (required even in bypass mode)
       authentication_backend:
         file:
-          enabled: false
+          enabled: true
+          path: /config/users_database.yml
+          password:
+            algorithm: argon2
 
       # Simple storage
       storage:

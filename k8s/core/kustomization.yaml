@@ -6,5 +6,6 @@ resources:
   - ingress/cert-manager/
   - storage/
   - ddns/
+  - postgresql/
   - redis/
   - authentik/

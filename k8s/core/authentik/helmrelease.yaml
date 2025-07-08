@@ -37,7 +37,17 @@ spec:
     redis:
       enabled: false
     postgresql:
-      enabled: false
+      enabled: true
+      auth:
+        existingSecret: authentik-secrets
+        secretKeys:
+          adminPasswordKey: postgres_password
+          userPasswordKey: postgres_password
+      primary:
+        persistence:
+          enabled: true
+          size: 8Gi
+          storageClass: longhorn
   valuesFrom:
     - kind: Secret
       name: authentik-secrets

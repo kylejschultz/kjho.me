@@ -18,6 +18,11 @@ spec:
       enabled: true
       storageClass: longhorn
       size: 10Gi
+    podSecurityContext:
+      fsGroup: 1000
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
     ingress:
       enabled: true
       ingressClassName: traefik

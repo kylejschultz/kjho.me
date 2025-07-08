@@ -7,4 +7,3 @@ resources:
   - storage/
   - ddns/
   - redis/
-  - auth/

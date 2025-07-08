@@ -8,5 +8,4 @@ resources:
   - traefik.yaml
   - uptime-kuma.yaml
   - redis.yaml
-  - authelia.yaml
   - longhorn-system.yaml

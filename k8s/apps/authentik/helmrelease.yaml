@@ -28,8 +28,6 @@ spec:
         host: authentik-postgresql
       redis:
         host: redis.redis.svc.cluster.local
-        password:
-          required: false
 
     server:
       ingress:

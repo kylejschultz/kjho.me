@@ -20,7 +20,7 @@ spec:
         enabled: false
       secret_key:
         existingSecret: authentik-secrets
-        key: secretKey
+        key: secret_key
       postgresql:
         host: authentik-postgresql
       redis:
@@ -47,4 +47,4 @@ spec:
         storageClass: longhorn
       auth:
         existingSecret: authentik-secrets
-        postgresPasswordKey: postgresPassword
+        postgresPasswordKey: password

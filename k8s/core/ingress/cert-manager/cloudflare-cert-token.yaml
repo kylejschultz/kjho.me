@@ -4,7 +4,7 @@ metadata:
   name: cloudflare-cert-token
   namespace: cert-manager
 spec:
-  refreshInterval: 6h
+  refreshInterval: 24h
   secretStoreRef:
     kind: ClusterSecretStore
     name: onepassword-vault

@@ -2,38 +2,45 @@
 
 # KJHo.me: *A Declarative Kubernetes Homelab*
 
-This repo acts as the source of truth for my HomeLab, running on a set of NUCs along with a worker node VM.
+This repository serves as the single source of truth for my self-hosted Kubernetes homelab, built on GitOps principles with Flux CD. Everything is managed declaratively through code, with zero manual kubectl commands in production.
 
-## Current Deployment
+## Architecture Overview
 
-This homelab runs a modern Kubernetes stack using GitOps principles:
+### Core Infrastructure Stack
+- **🔄 FluxCD**: GitOps continuous delivery managing all deployments
+- **🔐 External-Secrets**: Automated secret synchronization from 1Password vault
+- **🌐 Traefik**: Ingress controller with automatic service discovery
+- **🔒 cert-manager**: Automated SSL certificate management via Cloudflare
+- **📦 Helm**: Package management for all applications
+- **💾 Longhorn**: Distributed block storage with replication and snapshots
 
-### Core Infrastructure
-- **FluxCD**: GitOps continuous delivery
-- **External-Secrets**: Secret management with 1Password integration
-- **Traefik**: Ingress controller with automatic HTTPS
-- **cert-manager**: Let's Encrypt certificate automation
-- **OpenEBS**: Container-native storage
+### Application Services
+- **🔑 Authentik**: Identity provider and single sign-on (SSO)
+- **🗃️ PostgreSQL**: Primary database for Authentik and other applications
+- **⚡ Redis**: Cache and session store for Authentik
+- **📡 Cloudflare DDNS**: Dynamic DNS updates for external access
+- **📊 Uptime Kuma**: Self-hosted monitoring and status pages
+- **🔔 Discord Notifications**: Automated cluster alerts and status updates
 
-### Applications & Services
-- **Uptime Kuma**: Self-hosted monitoring and status page
-- **Cloudflare DDNS**: Dynamic DNS updates for external access
-- **Discord Notifications**: Automated cluster alerts
+### GitOps Workflow
+- **Declarative**: All infrastructure and applications defined in YAML manifests
+- **Automated**: Flux handles deployment, upgrades, and reconciliation
+- **Secure**: Secrets stored in 1Password, never in Git
+- **Validated**: Pre-commit hooks ensure manifest quality
+- **Incremental**: Small, frequent commits over large changes
 
-### Operations
-- All secrets sourced from 1Password
-- Automated certificate management
-- GitOps workflow with validation hooks
+### Key Design Principles
+- **GitOps-First**: All changes flow through Git, avoiding manual interventions
+- **Minimal Complexity**: Keep deployment manifests simple and maintainable
+- **Latest Versions**: Use current Helm chart and application versions
+- **Separation of Concerns**: Individual files for each Kubernetes component
 
-## Hardware
-The lab consists of:
+## Hardware Infrastructure
 
-- **Intel NUCs (x3)**:
-    - **nuc1**: 2 Cores, 32GB RAM, 512GB SSD
-    - **nuc2**: 2 Cores, 16GB RAM, 512GB SSD
-    - **nuc3**: 2 Cores, 8GB RAM, 256GB SSD
-- **Worker Node VM**:
-    - **nucx**: 4 core, 4-8GB RAM, 1TB SSD
-        - Virtualized Ubuntu install on my gaming rig with dynamic RAM allocation
-        - Intended for heavy-cpu workloads that would overpower the Celeron processors in the NUCs.
-        - Will also act as storage controller, with up to 4 1TB SSDs for backing storage.
+### Physical Nodes
+- **🖥️ Intel NUCs (x3)**: Core cluster nodes with Celeron processors
+  - **lognuc1**: 2 cores, 32GB RAM, 512GB SSD
+  - **lognuc2**: 2 cores, 16GB RAM, 512GB SSD
+  - **lognuc3**: 2 cores, 8GB RAM, 256GB SSD
+- **💻 Worker VM**: High-performance node for compute-intensive workloads
+  - **lognucx**: 4 cores, 4-8GB RAM, 1TB SSD (dynamic allocation)

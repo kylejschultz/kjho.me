@@ -27,18 +27,20 @@ spec:
           apk add --no-cache jq
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
           chmod +x kubectl
-          mv kubectl /usr/local/bin/
+          mkdir -p /tmp/bin
+          mv kubectl /tmp/bin/
+          export PATH="/tmp/bin:$PATH"
 
           # Function to check health
           check_health() {
             # Check ClusterSecretStore status
-            css_status=$(kubectl get clustersecretstore onepassword-vault -o jsonpath='{.status.conditions[0].status}' 2>/dev/null || echo "Unknown")
+            css_status=$(/tmp/bin/kubectl get clustersecretstore onepassword-vault -o jsonpath='{.status.conditions[0].status}' 2>/dev/null || echo "Unknown")
 
             # Check ExternalSecrets
-            failed_secrets=$(kubectl get externalsecrets -A --no-headers 2>/dev/null | grep -v "SecretSynced.*True" | wc -l)
+            failed_secrets=$(/tmp/bin/kubectl get externalsecrets -A --no-headers 2>/dev/null | grep -v "SecretSynced.*True" | wc -l)
 
             # Check recent errors (last 2 minutes for more responsive monitoring)
-            recent_errors=$(kubectl logs -n external-secrets -l app.kubernetes.io/name=external-secrets --since=2m 2>/dev/null | grep -c "invalid.*format\|rate.limit\|unable.to.validate" || echo "0")
+            recent_errors=$(/tmp/bin/kubectl logs -n external-secrets -l app.kubernetes.io/name=external-secrets --since=2m 2>/dev/null | grep -c "invalid.*format\|rate.limit\|unable.to.validate" || echo "0")
 
             # Determine health status
             if [ "$css_status" = "True" ] && [ "$failed_secrets" -eq 0 ] && [ "$recent_errors" -lt 3 ]; then

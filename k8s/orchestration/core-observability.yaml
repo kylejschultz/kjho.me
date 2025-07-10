@@ -4,7 +4,7 @@ metadata:
   name: core-observability
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 15m
   path: ./k8s/core/observability
   prune: true
   sourceRef:

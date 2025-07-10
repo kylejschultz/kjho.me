@@ -20,7 +20,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 30m0s
-  path: ./k8s
+  path: ./k8s/orchestration
   prune: true
   sourceRef:
     kind: GitRepository

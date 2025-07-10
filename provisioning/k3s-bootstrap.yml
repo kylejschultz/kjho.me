@@ -86,7 +86,7 @@
     - name: Apply local 1Password token secret
       kubernetes.core.k8s:
         state: present
-        src: "{{ lookup('env', 'HOME') }}/kjho.me/assets/onepassword-token.yaml"
+        src: "{{ lookup('env', 'HOME') }}/kjho.me/assets/bootstrap-onepassword-token.yaml"
       when: inventory_hostname == k3s_server_node
 
 

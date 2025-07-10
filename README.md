@@ -15,9 +15,8 @@ This repository serves as the single source of truth for my self-hosted Kubernet
 - **💾 Longhorn**: Distributed block storage with replication and snapshots
 
 ### Application Services
-- **🔑 Authentik**: Identity provider and single sign-on (SSO)
-- **🗃️ PostgreSQL**: Primary database for Authentik and other applications
-- **⚡ Redis**: Cache and session store for Authentik
+- **🗃️ PostgreSQL**: Primary database for applications
+- **⚡ Redis**: Cache and session store for applications
 - **📡 Cloudflare DDNS**: Dynamic DNS updates for external access
 - **📊 Uptime Kuma**: Self-hosted monitoring and status pages
 - **🔔 Discord Notifications**: Automated cluster alerts and status updates

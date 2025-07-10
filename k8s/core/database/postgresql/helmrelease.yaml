@@ -24,6 +24,7 @@ spec:
         enabled: true
         size: 20Gi
         storageClass: longhorn
+        name: postgresql-data
       resources:
         requests:
           memory: 256Mi

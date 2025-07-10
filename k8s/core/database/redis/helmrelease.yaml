@@ -23,6 +23,7 @@ spec:
         enabled: true
         size: 1Gi
         storageClass: longhorn
+        name: redis-data
     replica:
       replicaCount: 0
     metrics:

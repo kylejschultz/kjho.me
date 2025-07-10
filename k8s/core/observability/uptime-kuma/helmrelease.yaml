@@ -18,6 +18,7 @@ spec:
       enabled: true
       storageClass: longhorn
       size: 10Gi
+      name: uptime-kuma-data
     podSecurityContext:
       fsGroup: 1000
     securityContext:

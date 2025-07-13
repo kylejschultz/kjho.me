@@ -6,6 +6,20 @@
     k3s_server_ip: 192.168.86.221
     kubeconfig_local_path: "{{ lookup('env', 'HOME') }}/.kube/kjhome"
   tasks:
+    - name: Update package lists
+      ansible.builtin.apt:
+        update_cache: yes
+      become: yes
+
+    - name: Upgrade Python to latest version
+      ansible.builtin.apt:
+        name:
+          - python3
+          - python3-pip
+          - python3-dev
+        state: latest
+      become: yes
+
     - name: Set internal_ip fact for each node
       set_fact:
         internal_ip: "{{ hostvars[inventory_hostname]['internal_ip'] }}"
@@ -78,17 +92,31 @@
       when: inventory_hostname == k3s_server_node
       become: false
 
+    - name: Rename all 'default' references to 'kjhome' in kubeconfig
+      shell: |
+        sed -i.bak 's/name: default/name: kjhome/g' "{{ kubeconfig_local_path }}"
+        sed -i.bak 's/current-context: default/current-context: kjhome/g' "{{ kubeconfig_local_path }}"
+        sed -i.bak 's/cluster: default/cluster: kjhome/g' "{{ kubeconfig_local_path }}"
+        sed -i.bak 's/user: default/user: kjhome/g' "{{ kubeconfig_local_path }}"
+        rm -f "{{ kubeconfig_local_path }}.bak"
+      delegate_to: localhost
+      when: inventory_hostname == k3s_server_node
+      become: false
+
     - name: Install Flux CLI on control-plane
       ansible.builtin.shell: |
         curl -s https://fluxcd.io/install.sh | sudo bash
       when: inventory_hostname == k3s_server_node
 
-    - name: Apply local 1Password token secret
+    - name: Apply 1Password secret from local manifest
       kubernetes.core.k8s:
         state: present
-        src: "{{ lookup('env', 'HOME') }}/kjho.me/assets/bootstrap-onepassword-token.yaml"
+        src: "{{ lookup('env','HOME') }}/kjho.me/assets/bootstrap-onepassword-token.yaml"
+        kubeconfig: "{{ kubeconfig_local_path }}"
+      delegate_to: localhost
+      run_once: true
+      become: false
       when: inventory_hostname == k3s_server_node
-
 
     - name: Bootstrap Flux to GitHub
       ansible.builtin.shell: |
@@ -97,7 +125,7 @@
           --owner=kylejschultz \
           --repository=kjho.me \
           --branch=main \
-          --path=k8s/flux-system \
+          --path=k8s/orchestration \
           --personal
       environment:
         GITHUB_TOKEN: "{{ lookup('env', 'GITHUB_PAT') }}"

@@ -16,6 +16,6 @@ spec:
   interval: 30m
   values:
     crds:
-      enabled: true
+      enabled: false
     prometheus:
       enabled: false

@@ -62,3 +62,12 @@
         - /usr/local/bin/k3s-killall.sh
         - /usr/local/bin/k3s-uninstall.sh
         - /usr/local/bin/k3s-agent-uninstall.sh
+
+    - name: Remove local kubeconfig file
+      ansible.builtin.file:
+        path: "{{ lookup('env', 'HOME') }}/.kube/kjhome"
+        state: absent
+      delegate_to: localhost
+      run_once: true
+      become: false
+      ignore_errors: true

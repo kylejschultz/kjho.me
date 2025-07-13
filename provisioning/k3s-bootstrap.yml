@@ -103,6 +103,11 @@
       when: inventory_hostname == k3s_server_node
       become: false
 
+    - name: Install cert-manager CRDs
+      ansible.builtin.shell: |
+        kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.15.1/cert-manager.crds.yaml
+      when: inventory_hostname == k3s_server_node
+
     - name: Install Flux CLI on control-plane
       ansible.builtin.shell: |
         curl -s https://fluxcd.io/install.sh | sudo bash

@@ -103,11 +103,6 @@
       when: inventory_hostname == k3s_server_node
       become: false
 
-    - name: Install cert-manager CRDs
-      ansible.builtin.shell: |
-        kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.15.1/cert-manager.crds.yaml
-      when: inventory_hostname == k3s_server_node
-
     - name: Install Flux CLI on control-plane
       ansible.builtin.shell: |
         curl -s https://fluxcd.io/install.sh | sudo bash
@@ -121,6 +116,27 @@
       delegate_to: localhost
       run_once: true
       become: false
+      when: inventory_hostname == k3s_server_node
+
+    - name: Install cert-manager CRDs
+      ansible.builtin.shell: |
+        kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.15.1/cert-manager.crds.yaml
+      when: inventory_hostname == k3s_server_node
+
+    - name: Install Traefik CRDs
+      ansible.builtin.shell: |
+        kubectl apply -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v36.3.0/traefik/crds/traefik.io_ingressroutes.yaml
+        kubectl apply -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v36.3.0/traefik/crds/traefik.io_middlewares.yaml
+        kubectl apply -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v36.3.0/traefik/crds/traefik.io_ingressroutetcps.yaml
+        kubectl apply -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v36.3.0/traefik/crds/traefik.io_ingressrouteudps.yaml
+        kubectl apply -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v36.3.0/traefik/crds/traefik.io_traefikservices.yaml
+        kubectl apply -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v36.3.0/traefik/crds/traefik.io_tlsoptions.yaml
+        kubectl apply -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v36.3.0/traefik/crds/traefik.io_serverstransports.yaml
+      when: inventory_hostname == k3s_server_node
+
+    - name: Install external-secrets CRDs
+      ansible.builtin.shell: |
+        kubectl apply -f https://raw.githubusercontent.com/external-secrets/external-secrets/main/deploy/crds/bundle.yaml
       when: inventory_hostname == k3s_server_node
 
     - name: Bootstrap Flux to GitHub

@@ -5,6 +5,16 @@ metadata:
   namespace: postgresql
 spec:
   interval: 10m
+  timeout: 10m
+  install:
+    timeout: 10m
+    remediation:
+      retries: 3
+  upgrade:
+    timeout: 10m
+    remediation:
+      retries: 3
+      remediateLastFailure: true
   chart:
     spec:
       chart: postgresql

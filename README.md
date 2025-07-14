@@ -8,7 +8,7 @@ This repository serves as the single source of truth for my self-hosted Kubernet
 
 ### Core Infrastructure Stack
 - **🔄 FluxCD**: GitOps continuous delivery managing all deployments
-- **🔐 External-Secrets**: Automated secret synchronization from 1Password vault
+- **🔐 1Password Connect**: Direct secret synchronization from 1Password vault using Connect Operator
 - **🌐 Traefik**: Ingress controller with automatic service discovery
 - **🔒 cert-manager**: Automated SSL certificate management via Cloudflare
 - **📦 Helm**: Package management for all applications
@@ -43,3 +43,59 @@ This repository serves as the single source of truth for my self-hosted Kubernet
   - **lognuc3**: 2 cores, 8GB RAM, 256GB SSD
 - **💻 Worker VM**: High-performance node for compute-intensive workloads
   - **lognucx**: 4 cores, 4-8GB RAM, 1TB SSD (dynamic allocation)
+
+## Deployment
+
+### Prerequisites
+- Physical nodes running Ubuntu with SSH access
+- 1Password vault with required secrets configured
+- GitHub repository access with personal access token
+- Ansible installed on deployment machine
+
+### Required Environment Variables
+Before deploying, set the following environment variables:
+
+```bash
+# 1Password Connect API Token
+export OP_CONNECT_TOKEN="your-1password-connect-api-token"
+
+# 1Password Connect Credentials File
+export OP_CONNECT_CREDENTIALS_FILE=$(cat /path/to/1password-credentials.json)
+
+# GitHub Personal Access Token (for Flux bootstrap)
+export GITHUB_PAT="your-github-personal-access-token"
+```
+
+### Deployment Steps
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/kylejschultz/kjho.me.git
+   cd kjho.me
+   ```
+
+2. **Configure environment variables** (see above)
+
+3. **Update inventory** if needed:
+   ```bash
+   # Edit provisioning/k3s-inventory.ini with your node details
+   ```
+
+4. **Deploy the cluster**:
+   ```bash
+   ansible-playbook -i provisioning/k3s-inventory.ini provisioning/k3s-bootstrap.yml
+   ```
+
+### What the Deployment Does
+- **Installs K3s** on all nodes with proper networking
+- **Deploys 1Password Connect Operator** for secret management
+- **Bootstraps Flux** for GitOps continuous delivery
+- **Applies all manifests** from this repository automatically
+- **Sets up Discord notifications** for cluster monitoring
+
+### Post-Deployment
+After deployment completes:
+- All applications will be automatically deployed via GitOps
+- Secrets will be synced from 1Password vault
+- SSL certificates will be issued automatically
+- Services will be accessible via configured ingress routes

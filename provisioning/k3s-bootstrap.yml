@@ -147,6 +147,22 @@
       become: false
       ignore_errors: true
 
+    - name: Create 1Password Connect API token secret
+      kubernetes.core.k8s:
+        definition:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: onepassword-token
+            namespace: 1password-connect
+          type: Opaque
+          data:
+            token: "{{ lookup('env', 'OP_CONNECT_TOKEN') | b64encode }}"
+        kubeconfig: "{{ kubeconfig_local_path }}"
+      delegate_to: localhost
+      when: inventory_hostname == k3s_server_node
+      become: false
+
     - name: Deploy 1Password Connect Operator
       kubernetes.core.helm:
         name: connect

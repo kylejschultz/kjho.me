@@ -5,6 +5,16 @@ metadata:
   namespace: longhorn-system
 spec:
   interval: 5m
+  timeout: 10m
+  install:
+    timeout: 10m
+    remediation:
+      retries: 3
+  upgrade:
+    timeout: 10m
+    remediation:
+      retries: 3
+      remediateLastFailure: true
   chart:
     spec:
       chart: longhorn
@@ -25,6 +35,12 @@ spec:
       defaultReplicaCount: 2
       guaranteedEngineManagerCPU: 12
       guaranteedReplicaManagerCPU: 12
+      # Volume recovery settings
+      removeSnapshotsDuringFilesystemTrim: enabled
+      # Backup settings for volume recovery
+      backupstorePollInterval: 300
+      # Disaster recovery settings
+      disasterRecoveryWaitInterval: 60
 
     longhornManager:
       tolerations:

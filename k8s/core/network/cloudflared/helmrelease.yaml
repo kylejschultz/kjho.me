@@ -1,0 +1,58 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cloudflared
+  namespace: cloudflared
+spec:
+  interval: 10m
+  timeout: 10m
+  install:
+    timeout: 10m
+    remediation:
+      retries: 3
+  upgrade:
+    timeout: 10m
+    remediation:
+      retries: 3
+      remediateLastFailure: true
+  chart:
+    spec:
+      chart: cloudflared
+      version: "0.3.0"
+      sourceRef:
+        kind: HelmRepository
+        name: cloudflared
+        namespace: cloudflared
+  values:
+    cloudflared:
+      tunnel_token:
+        existingSecret: cloudflared-tunnel-token
+        key: tunnel-token
+
+    replicaCount: 2
+
+    resources:
+      requests:
+        memory: 64Mi
+        cpu: 100m
+      limits:
+        memory: 128Mi
+        cpu: 200m
+
+    nodeSelector:
+      kubernetes.io/arch: amd64
+
+    tolerations: []
+
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                - cloudflared
+            topologyKey: kubernetes.io/hostname

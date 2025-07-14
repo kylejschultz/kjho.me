@@ -193,3 +193,11 @@
       environment:
         GITHUB_TOKEN: "{{ lookup('env', 'GITHUB_PAT') }}"
       when: inventory_hostname == k3s_server_node
+
+    - name: Deploy Discord notifications for immediate Flux feedback
+      ansible.builtin.shell: |
+        export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+        kubectl apply -k k8s/orchestration/flux-system/flux-notifications/
+      delegate_to: localhost
+      when: inventory_hostname == k3s_server_node
+      become: false

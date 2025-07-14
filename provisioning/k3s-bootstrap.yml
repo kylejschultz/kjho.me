@@ -156,7 +156,7 @@
         kubeconfig: "{{ kubeconfig_local_path }}"
         values:
           connect:
-            credentials_base64: "{{ lookup('env', 'OP_CONNECT_CREDENTIALS') | b64encode }}"
+            credentials_base64: "{{ lookup('env', 'OP_CONNECT_CREDENTIALS_FILE') | b64encode }}"
           operator:
             create: true
             autoRestart: true

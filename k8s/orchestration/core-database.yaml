@@ -14,5 +14,4 @@ spec:
   retryInterval: 2m
   wait: true
   dependsOn:
-    - name: core-external-secrets
     - name: core-storage

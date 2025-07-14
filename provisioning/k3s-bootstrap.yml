@@ -157,9 +157,11 @@
         name: 1password
         repo_url: https://1password.github.io/connect-helm-charts
         kubeconfig: "{{ kubeconfig_local_path }}"
+        force_update: true
       delegate_to: localhost
       when: inventory_hostname == k3s_server_node
       become: false
+      ignore_errors: true
 
     - name: Deploy 1Password Connect Operator
       kubernetes.core.helm:

@@ -99,3 +99,22 @@ After deployment completes:
 - Secrets will be synced from 1Password vault
 - SSL certificates will be issued automatically
 - Services will be accessible via configured ingress routes
+
+## Cluster Management
+
+### Complete Cluster Wipe
+To completely remove K3s from all nodes and start fresh:
+
+```bash
+ansible-playbook -i provisioning/k3s-inventory.ini provisioning/k3s-wipe.yml
+```
+
+### What the Wipe Script Does
+- **Runs uninstall scripts**: Executes K3s server and agent uninstall scripts
+- **Removes directories**: Cleans up `/etc/rancher`, `/var/lib/rancher`, `/var/lib/kubelet`, and other K3s directories
+- **Cleans network interfaces**: Removes CNI, Flannel, and other cluster network interfaces
+- **Purges iptables rules**: Removes K3s-related firewall rules
+- **Removes binaries**: Deletes K3s binaries and CLI tools
+- **Cleans local config**: Removes local kubeconfig file
+
+⚠️ **Warning**: This operation is destructive and will completely remove the K3s cluster. All data, applications, and configurations will be lost. Use with caution.

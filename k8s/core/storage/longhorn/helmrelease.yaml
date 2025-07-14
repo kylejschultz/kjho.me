@@ -25,7 +25,7 @@ spec:
         namespace: flux-system
   values:
     defaultSettings:
-      defaultDataPath: /var/lib/longhorn/
+      defaultDataPath: /mnt/data1/longhorn/
       defaultDataLocality: prefer-local
       replicaSoftAntiAffinity: false
       replicaAutoBalance: least-effort
@@ -33,6 +33,10 @@ spec:
       storageMinimalAvailablePercentage: 25
       upgradeChecker: false
       defaultReplicaCount: 2
+      # Allow scheduling on any node, but prefer nodes with more space
+      storageReservedPercentageForDefaultDisk: 25
+      # Automatically balance replicas to nodes with more available space
+      replicaReplenishmentWaitInterval: 600
       guaranteedEngineManagerCPU: 12
       guaranteedReplicaManagerCPU: 12
       # Volume recovery settings

@@ -125,11 +125,6 @@
         kubectl apply -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v36.3.0/traefik/crds/traefik.io_serverstransports.yaml
       when: inventory_hostname == k3s_server_node
 
-    - name: Install 1Password Connect Operator CRDs
-      ansible.builtin.shell: |
-        kubectl apply -f https://raw.githubusercontent.com/1Password/connect-helm-charts/main/charts/connect/crds/onepassword.com_onepassworditems.yaml
-      when: inventory_hostname == k3s_server_node
-
     - name: Create 1password-connect namespace
       kubernetes.core.k8s:
         name: 1password-connect
@@ -191,7 +186,7 @@
         flux bootstrap github \
           --owner=kylejschultz \
           --repository=kjho.me \
-          --branch=main \
+          --branch=feature/1password-connect-operator \
           --path=k8s/orchestration \
           --personal
       environment:

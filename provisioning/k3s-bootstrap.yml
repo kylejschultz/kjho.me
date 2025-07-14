@@ -136,22 +136,6 @@
       when: inventory_hostname == k3s_server_node
       become: false
 
-    - name: Create 1Password Connect credentials secret
-      kubernetes.core.k8s:
-        definition:
-          apiVersion: v1
-          kind: Secret
-          metadata:
-            name: op-credentials
-            namespace: 1password-connect
-          type: Opaque
-          data:
-            1password-credentials.json: "{{ lookup('env', 'OP_CONNECT_CREDENTIALS') | b64encode }}"
-        kubeconfig: "{{ kubeconfig_local_path }}"
-      delegate_to: localhost
-      when: inventory_hostname == k3s_server_node
-      become: false
-
     - name: Add 1Password Connect Helm repository
       kubernetes.core.helm_repository:
         name: 1password
@@ -172,8 +156,7 @@
         kubeconfig: "{{ kubeconfig_local_path }}"
         values:
           connect:
-            credentials: op-credentials
-            credentialsKey: 1password-credentials.json
+            credentials_base64: "{{ lookup('env', 'OP_CONNECT_CREDENTIALS') | b64encode }}"
           operator:
             create: true
             autoRestart: true

@@ -15,4 +15,4 @@ spec:
           email: kyle@kjschultz.com
           apiTokenSecretRef:
             name: cloudflare-cert-token
-            key: cf-token
+            key: credential

@@ -108,15 +108,6 @@
         curl -s https://fluxcd.io/install.sh | sudo bash
       when: inventory_hostname == k3s_server_node
 
-    - name: Apply 1Password secret from local manifest
-      kubernetes.core.k8s:
-        state: present
-        src: "{{ lookup('env','HOME') }}/kjho.me/assets/bootstrap-onepassword-token.yaml"
-        kubeconfig: "{{ kubeconfig_local_path }}"
-      delegate_to: localhost
-      run_once: true
-      become: false
-      when: inventory_hostname == k3s_server_node
 
     - name: Install cert-manager CRDs
       ansible.builtin.shell: |
@@ -134,10 +125,65 @@
         kubectl apply -f https://raw.githubusercontent.com/traefik/traefik-helm-chart/v36.3.0/traefik/crds/traefik.io_serverstransports.yaml
       when: inventory_hostname == k3s_server_node
 
-    - name: Install external-secrets CRDs
+    - name: Install 1Password Connect Operator CRDs
       ansible.builtin.shell: |
-        kubectl apply -f https://raw.githubusercontent.com/external-secrets/external-secrets/main/deploy/crds/bundle.yaml
+        kubectl apply -f https://raw.githubusercontent.com/1Password/connect-helm-charts/main/charts/connect/crds/onepassword.com_onepassworditems.yaml
       when: inventory_hostname == k3s_server_node
+
+    - name: Create 1password-connect namespace
+      kubernetes.core.k8s:
+        name: 1password-connect
+        api_version: v1
+        kind: Namespace
+        state: present
+        kubeconfig: "{{ kubeconfig_local_path }}"
+      delegate_to: localhost
+      when: inventory_hostname == k3s_server_node
+      become: false
+
+    - name: Create 1Password Connect credentials secret
+      kubernetes.core.k8s:
+        definition:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: op-credentials
+            namespace: 1password-connect
+          type: Opaque
+          data:
+            1password-credentials.json: "{{ lookup('env', 'OP_CONNECT_CREDENTIALS') | b64encode }}"
+        kubeconfig: "{{ kubeconfig_local_path }}"
+      delegate_to: localhost
+      when: inventory_hostname == k3s_server_node
+      become: false
+
+    - name: Add 1Password Connect Helm repository
+      kubernetes.core.helm_repository:
+        name: 1password
+        repo_url: https://1password.github.io/connect-helm-charts
+        kubeconfig: "{{ kubeconfig_local_path }}"
+      delegate_to: localhost
+      when: inventory_hostname == k3s_server_node
+      become: false
+
+    - name: Deploy 1Password Connect Operator
+      kubernetes.core.helm:
+        name: connect
+        chart_ref: 1password/connect
+        release_namespace: 1password-connect
+        create_namespace: false
+        kubeconfig: "{{ kubeconfig_local_path }}"
+        values:
+          connect:
+            credentials: op-credentials
+            credentialsKey: 1password-credentials.json
+          operator:
+            create: true
+            autoRestart: true
+            pollingInterval: 600
+      delegate_to: localhost
+      when: inventory_hostname == k3s_server_node
+      become: false
 
     - name: Bootstrap Flux to GitHub
       ansible.builtin.shell: |

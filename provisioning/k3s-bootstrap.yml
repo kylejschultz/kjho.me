@@ -187,7 +187,7 @@
         flux bootstrap github \
           --owner=kylejschultz \
           --repository=kjho.me \
-          --branch=feature/1password-connect-operator \
+          --branch=main \
           --path=k8s/orchestration \
           --personal
       environment:

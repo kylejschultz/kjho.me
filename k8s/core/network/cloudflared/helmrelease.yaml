@@ -24,11 +24,6 @@ spec:
         name: cloudflared
         namespace: cloudflared
   values:
-    cloudflared:
-      tunnel_token:
-        existingSecret: cloudflared-tunnel-token
-        key: tunnel-token
-
     replicaCount: 2
 
     resources:

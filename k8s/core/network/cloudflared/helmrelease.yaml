@@ -24,15 +24,45 @@ spec:
         name: cloudflared
         namespace: cloudflared
   values:
-    replicaCount: 2
-
-    resources:
-      requests:
-        memory: 64Mi
-        cpu: 100m
-      limits:
-        memory: 128Mi
-        cpu: 200m
+    controllers:
+      cloudflare-tunnel:
+        strategy: RollingUpdate
+        containers:
+          app:
+            image:
+              repository: docker.io/cloudflare/cloudflared
+            env:
+              NO_AUTOUPDATE: true
+              TUNNEL_METRICS: 0.0.0.0:8080
+              TUNNEL_ORIGIN_ENABLE_HTTP2: true
+              TUNNEL_POST_QUANTUM: true
+              TUNNEL_TRANSPORT_PROTOCOL: quic
+            envFrom:
+              - secretRef:
+                  name: cloudflared-tunnel-secret
+            args: ["tunnel", "run"]
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ready
+                    port: &port 8080
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 256Mi
 
     nodeSelector:
       kubernetes.io/arch: amd64

@@ -15,6 +15,23 @@ spec:
     remediation:
       retries: 3
       remediateLastFailure: true
+  valuesFrom:
+    - kind: Secret
+      name: cloudflared-cloudflare-secret
+      valuesKey: account
+      targetPath: cloudflare.account
+    - kind: Secret
+      name: cloudflared-cloudflare-secret
+      valuesKey: tunnelName
+      targetPath: cloudflare.tunnelName
+    - kind: Secret
+      name: cloudflared-cloudflare-secret
+      valuesKey: tunnelId
+      targetPath: cloudflare.tunnelId
+    - kind: Secret
+      name: cloudflared-cloudflare-secret
+      valuesKey: secret
+      targetPath: cloudflare.secret
   chart:
     spec:
       chart: cloudflare-tunnel
@@ -22,50 +39,17 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: cloudflared
-        namespace: cloudflared
+        namespace: flux-system
   values:
-    controllers:
-      cloudflare-tunnel:
-        strategy: RollingUpdate
-        containers:
-          app:
-            image:
-              repository: docker.io/cloudflare/cloudflared
-            env:
-              NO_AUTOUPDATE: true
-              TUNNEL_METRICS: 0.0.0.0:8080
-              TUNNEL_ORIGIN_ENABLE_HTTP2: true
-              TUNNEL_POST_QUANTUM: true
-              TUNNEL_TRANSPORT_PROTOCOL: quic
-            envFrom:
-              - secretRef:
-                  name: cloudflared-cloudflare-secret
-            args: ["tunnel", "run"]
-            probes:
-              liveness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /ready
-                    port: &port 8080
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
-              readiness: *probes
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
-            resources:
-              requests:
-                cpu: 10m
-              limits:
-                memory: 256Mi
+    replicaCount: 2
 
-    nodeSelector:
-      kubernetes.io/arch: amd64
+    resources:
+      requests:
+        memory: 64Mi
+        cpu: 100m
+      limits:
+        memory: 128Mi
+        cpu: 200m
 
     tolerations: []
 

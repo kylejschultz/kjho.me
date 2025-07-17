@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
 - cert-manager.yaml
 - cloudflared.yaml
+- external-dns.yaml
 - longhorn.yaml
 - postgresql.yaml
 - redis.yaml

@@ -3,5 +3,6 @@ kind: Kustomization
 resources:
   - cloudflared/
   - ddns/
+  - external-dns/
   - ingress/cert-manager/
   - ingress/traefik/

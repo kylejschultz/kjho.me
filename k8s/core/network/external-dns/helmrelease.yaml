@@ -33,6 +33,8 @@ spec:
       secretName: external-dns-cloudflare-secret
       # Use API token instead of email/key
       apiToken: "$(CF_API_TOKEN)"
+      # Enable proxying (orange cloud) for tunnel records
+      proxied: true
 
     # Set environment variables from secret
     env:

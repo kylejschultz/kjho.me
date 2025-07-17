@@ -4,8 +4,10 @@ metadata:
   name: longhorn-external-dns
   namespace: longhorn-system
   annotations:
-    external-dns.alpha.kubernetes.io/hostname: longhorn.kjho.me
-    external-dns.alpha.kubernetes.io/ttl: "300"
+    # Tell External-DNS to create DNS records for this service
+    external-dns.alpha.kubernetes.io/hostname: "longhorn.kjho.me"
+    # Point the DNS record to your tunnel's CNAME target
+    external-dns.alpha.kubernetes.io/target: "0a5fdf0e-8949-45ac-86ad-cac3bf8d50ce.cfargotunnel.com"
 spec:
   type: ExternalName
-  externalName: 0a5fdf0e-8949-45ac-86ad-cac3bf8d50ce.cfargotunnel.com
+  externalName: "0a5fdf0e-8949-45ac-86ad-cac3bf8d50ce.cfargotunnel.com"

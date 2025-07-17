@@ -1,4 +1,4 @@
-<p align="center"><img src="./logo_transparent.png" alt="Home Kubernetes Logo" width="300"/></p>
+<p align="center"><img src="assets/images/logo_transparent.png" alt="Home Kubernetes Logo" width="300"/></p>
 
 # KJHo.me: *A Declarative Kubernetes Homelab*
 

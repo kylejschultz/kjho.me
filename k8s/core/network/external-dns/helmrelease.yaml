@@ -31,6 +31,16 @@ spec:
     cloudflare:
       # Use secret for API token
       secretName: external-dns-cloudflare-secret
+      # Use API token instead of email/key
+      apiToken: "$(CF_API_TOKEN)"
+
+    # Set environment variables from secret
+    env:
+      - name: CF_API_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: external-dns-cloudflare-secret
+            key: CF_API_TOKEN
 
     # Domain filter - only manage records for this domain
     domainFilters:

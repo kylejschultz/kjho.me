@@ -1,11 +1,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-- cert-manager.yaml
 - cloudflared.yaml
 - external-dns.yaml
 - longhorn.yaml
 - postgresql.yaml
 - redis.yaml
-- traefik.yaml
 - uptime-kuma.yaml

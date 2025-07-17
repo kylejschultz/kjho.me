@@ -69,4 +69,4 @@ spec:
     cloudflare:
       ingress:
         - hostname: uptime.kjho.me
-          service: http://uptime-kuma.uptime-kuma.svc.cluster.local:3001
+          service: http://uptime-kuma.uptime-kuma.svc.cluster.local:80

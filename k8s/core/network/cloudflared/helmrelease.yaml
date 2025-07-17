@@ -70,3 +70,5 @@ spec:
       ingress:
         - hostname: uptime.kjho.me
           service: http://uptime-kuma.uptime-kuma.svc.cluster.local:80
+        - hostname: longhorn.kjho.me
+          service: http://longhorn-frontend.longhorn-system.svc.cluster.local:80

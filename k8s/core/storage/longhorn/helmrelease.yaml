@@ -65,11 +65,4 @@ spec:
         type: ClusterIP
 
     ingress:
-      enabled: true
-      ingressClassName: traefik
-      host: longhorn.kjho.me
-      annotations:
-        cert-manager.io/cluster-issuer: "letsencrypt-cloudflare"
-        traefik.ingress.kubernetes.io/router.tls: "true"
-      tls: true
-      tlsSecret: longhorn-kjho-me-tls
+      enabled: false

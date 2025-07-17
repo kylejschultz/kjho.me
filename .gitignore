@@ -4,3 +4,5 @@ _gitignored/
 */.DS_Store
 .tmp
 *.code-workspace
+assets/kubeconfig
+assets/bootstrap/1password-credentials.json

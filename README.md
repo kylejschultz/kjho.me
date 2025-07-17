@@ -9,15 +9,14 @@ This repository serves as the single source of truth for my self-hosted Kubernet
 ### Core Infrastructure Stack
 - **🔄 FluxCD**: GitOps continuous delivery managing all deployments
 - **🔐 1Password Connect**: Direct secret synchronization from 1Password vault using Connect Operator
-- **🌐 Traefik**: Ingress controller with automatic service discovery
-- **🔒 cert-manager**: Automated SSL certificate management via Cloudflare
+- **🌐 Cloudflare Tunnel**: Secure ingress without exposed ports via Cloudflare's edge network
+- **🌍 External-DNS**: Automated DNS record management with Cloudflare integration
 - **📦 Helm**: Package management for all applications
 - **💾 Longhorn**: Distributed block storage with replication and snapshots
 
 ### Application Services
 - **🗃️ PostgreSQL**: Primary database for applications
 - **⚡ Redis**: Cache and session store for applications
-- **📡 Cloudflare DDNS**: Dynamic DNS updates for external access
 - **📊 Uptime Kuma**: Self-hosted monitoring and status pages
 - **🔔 Discord Notifications**: Automated cluster alerts and status updates
 
@@ -97,8 +96,86 @@ export GITHUB_PAT="your-github-personal-access-token"
 After deployment completes:
 - All applications will be automatically deployed via GitOps
 - Secrets will be synced from 1Password vault
-- SSL certificates will be issued automatically
-- Services will be accessible via configured ingress routes
+- Cloudflare Tunnel will be established for secure ingress
+- DNS records will be automatically managed via External-DNS
+- Services will be accessible via configured domain endpoints
+
+## Adding New Domain Endpoints
+
+To expose a new service through the Cloudflare Tunnel with automatic DNS management:
+
+### Step 1: Configure the Application
+Ensure the application has a ClusterIP service (this is typically created automatically by Helm charts):
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-app
+  namespace: my-namespace
+spec:
+  type: ClusterIP
+  selector:
+    app: my-app
+  ports:
+    - port: 80
+      targetPort: 8080
+```
+
+### Step 2: Add to Cloudflare Tunnel Configuration
+Update the Cloudflare Tunnel ingress configuration in `k8s/core/network/cloudflared/helmrelease.yaml`:
+
+```yaml
+cloudflare:
+  ingress:
+    - hostname: existing-service.domain.tld
+      service: http://existing-service.existing-namespace.svc.cluster.local:80
+    - hostname: my-app.domain.tld  # Add your new domain
+      service: http://my-app.my-namespace.svc.cluster.local:80
+```
+
+### Step 3: Create ExternalName Service for DNS Management
+Create an ExternalName service to tell External-DNS to manage the domain:
+
+```yaml
+# k8s/core/[category]/[app]/external-dns-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-app-external-dns
+  namespace: my-namespace
+  annotations:
+    # Tell External-DNS to create DNS records for this service
+    external-dns.alpha.kubernetes.io/hostname: "my-app.domain.tld"
+    # Point the DNS record to your tunnel's CNAME target
+    external-dns.alpha.kubernetes.io/target: "TUNNEL_ID.cfargotunnel.com"
+spec:
+  type: ExternalName
+  externalName: "TUNNEL_ID.cfargotunnel.com"
+```
+
+### Step 4: Add to Kustomization
+Include the ExternalName service in your kustomization.yaml:
+
+```yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - helmrelease.yaml
+  - external-dns-service.yaml  # Add this line
+```
+
+### Step 5: Deploy Changes
+Commit and push your changes. Flux will automatically:
+1. Update the Cloudflare Tunnel configuration
+2. Create DNS records via External-DNS
+3. Enable proxying through Cloudflare
+
+### Verification
+After deployment:
+- Check that DNS records are created: `dig my-app.domain.tld`
+- Verify External-DNS logs: `kubectl logs -n external-dns -l app.kubernetes.io/name=external-dns`
+- Test accessibility: Visit `https://my-app.domain.tld` in your browser
 
 ## Cluster Management
 

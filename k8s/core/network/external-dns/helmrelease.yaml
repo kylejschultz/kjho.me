@@ -36,6 +36,10 @@ spec:
       # Enable proxying (orange cloud) for tunnel records
       proxied: true
 
+    # Additional Cloudflare settings
+    extraArgs:
+      - --cloudflare-proxied
+
     # Set environment variables from secret
     env:
       - name: CF_API_TOKEN

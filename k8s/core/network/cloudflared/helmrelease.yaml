@@ -70,5 +70,3 @@ spec:
       ingress:
         - hostname: uptime.kjho.me
           service: http://uptime-kuma.uptime-kuma.svc.cluster.local:3001
-        # Catch-all rule (required as last rule)
-        - service: http_status:404

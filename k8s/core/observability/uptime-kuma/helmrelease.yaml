@@ -25,16 +25,4 @@ spec:
       runAsUser: 1000
       runAsGroup: 1000
     ingress:
-      enabled: true
-      ingressClassName: traefik
-      annotations:
-        cert-manager.io/cluster-issuer: letsencrypt-cloudflare
-      hosts:
-        - host: uptime.kjho.me
-          paths:
-            - path: /
-              pathType: Prefix
-      tls:
-        - hosts:
-            - uptime.kjho.me
-          secretName: uptime-kuma-tls
+      enabled: false

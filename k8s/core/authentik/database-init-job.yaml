@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: authentik-db-init
+  namespace: authentik
+  annotations:
+    # This annotation ensures the job runs after PostgreSQL is ready
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-1"
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: db-init
+        image: postgres:16
+        command:
+        - /bin/bash
+        - -c
+        - |
+          echo "Waiting for PostgreSQL to be ready..."
+          until pg_isready -h $POSTGRES_HOST -p 5432 -U postgres; do
+            echo "PostgreSQL is not ready, waiting..."
+            sleep 5
+          done
+
+          echo "Creating Authentik database if it doesn't exist..."
+          PGPASSWORD=$POSTGRES_PASSWORD psql -h $POSTGRES_HOST -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = 'authentik'" | grep -q 1 || PGPASSWORD=$POSTGRES_PASSWORD psql -h $POSTGRES_HOST -U postgres -c "CREATE DATABASE authentik;"
+
+          echo "Database initialization complete"
+        env:
+        - name: POSTGRES_HOST
+          value: postgresql.postgresql.svc.cluster.local
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: authentik-secret
+              key: postgresql_password
+      backoffLimit: 3

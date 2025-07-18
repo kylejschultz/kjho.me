@@ -13,3 +13,6 @@ spec:
   timeout: 5m
   retryInterval: 2m
   wait: true
+  dependsOn:
+    - name: core-database
+    - name: flux-system

@@ -15,4 +15,4 @@ spec:
   wait: true
   dependsOn:
     - name: core-database
-    - name: foundational
+    - name: flux-system

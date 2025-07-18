@@ -104,8 +104,3 @@ spec:
                   values:
                   - worker
               topologyKey: kubernetes.io/hostname
-
-    service:
-      type: ClusterIP
-      port: 80
-      targetPort: 9000

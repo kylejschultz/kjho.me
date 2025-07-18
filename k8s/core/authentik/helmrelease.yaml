@@ -18,22 +18,15 @@ spec:
   chart:
     spec:
       chart: authentik
-      version: "2024.10.4"
+      version: '2024.6.3'
       sourceRef:
         kind: HelmRepository
         name: authentik
         namespace: flux-system
   values:
-    global:
-      deploymentAnnotations:
-        secret.reloader.stakater.com/reload: "authentik-secret"
-
     authentik:
-      secret_key:
-        valueFrom:
-          secretKeyRef:
-            name: authentik-secret
-            key: secret_key
+      error_reporting:
+        enabled: false
       postgresql:
         host: postgresql.postgresql.svc.cluster.local
         name: authentik
@@ -52,55 +45,24 @@ spec:
               key: redis_password
 
     server:
-      replicas: 2
-      resources:
-        requests:
-          cpu: 100m
-          memory: 512Mi
-        limits:
-          cpu: 500m
-          memory: 1Gi
-
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app.kubernetes.io/name
-                  operator: In
-                  values:
-                  - authentik
-                - key: app.kubernetes.io/component
-                  operator: In
-                  values:
-                  - server
-              topologyKey: kubernetes.io/hostname
+      env:
+        AUTHENTIK_SECRET_KEY:
+          valueFrom:
+            secretKeyRef:
+              name: authentik-secret
+              key: secret_key
+      # No ingress - using Cloudflare tunnel
+      ingress:
+        enabled: false
 
     worker:
-      replicas: 2
-      resources:
-        requests:
-          cpu: 100m
-          memory: 512Mi
-        limits:
-          cpu: 500m
-          memory: 1Gi
+      env:
+        AUTHENTIK_SECRET_KEY:
+          valueFrom:
+            secretKeyRef:
+              name: authentik-secret
+              key: secret_key
 
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app.kubernetes.io/name
-                  operator: In
-                  values:
-                  - authentik
-                - key: app.kubernetes.io/component
-                  operator: In
-                  values:
-                  - worker
-              topologyKey: kubernetes.io/hostname
+    # Use external PostgreSQL instead of bundled one
+    postgresql:
+      enabled: false

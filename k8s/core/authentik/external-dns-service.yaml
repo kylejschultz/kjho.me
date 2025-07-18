@@ -5,7 +5,7 @@ metadata:
   namespace: authentik
   annotations:
     external-dns.alpha.kubernetes.io/hostname: "auth.kjho.me"
-    external-dns.alpha.kubernetes.io/target: "4b8b2aac-eb36-4cc9-a664-9db4d6cf3bb0.cfargotunnel.com"
+    external-dns.alpha.kubernetes.io/target: "0a5fdf0e-8949-45ac-86ad-cac3bf8d50ce.cfargotunnel.com"
 spec:
   type: ExternalName
-  externalName: "4b8b2aac-eb36-4cc9-a664-9db4d6cf3bb0.cfargotunnel.com"
+  externalName: "0a5fdf0e-8949-45ac-86ad-cac3bf8d50ce.cfargotunnel.com"

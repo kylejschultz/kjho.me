@@ -24,44 +24,40 @@ spec:
         name: authentik
         namespace: flux-system
   values:
-    authentik:
-      error_reporting:
-        enabled: false
-      postgresql:
-        host: postgresql.postgresql.svc.cluster.local
-        name: authentik
-        user: postgres
-        password:
+    global:
+      env:
+        - name: AUTHENTIK_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: authentik-secret
+              key: secret_key
+        - name: AUTHENTIK_POSTGRESQL__HOST
+          value: postgresql.postgresql.svc.cluster.local
+        - name: AUTHENTIK_POSTGRESQL__NAME
+          value: authentik
+        - name: AUTHENTIK_POSTGRESQL__USER
+          value: postgres
+        - name: AUTHENTIK_POSTGRESQL__PASSWORD
           valueFrom:
             secretKeyRef:
               name: authentik-secret
               key: postgresql_password
-      redis:
-        host: redis-master.redis.svc.cluster.local
-        password:
+        - name: AUTHENTIK_REDIS__HOST
+          value: redis-master.redis.svc.cluster.local
+        - name: AUTHENTIK_REDIS__PASSWORD
           valueFrom:
             secretKeyRef:
               name: authentik-secret
               key: redis_password
 
+    authentik:
+      error_reporting:
+        enabled: false
+
     server:
-      env:
-        AUTHENTIK_SECRET_KEY:
-          valueFrom:
-            secretKeyRef:
-              name: authentik-secret
-              key: secret_key
       # No ingress - using Cloudflare tunnel
       ingress:
         enabled: false
-
-    worker:
-      env:
-        AUTHENTIK_SECRET_KEY:
-          valueFrom:
-            secretKeyRef:
-              name: authentik-secret
-              key: secret_key
 
     # Use external PostgreSQL instead of bundled one
     postgresql:

@@ -17,6 +17,7 @@ This repository serves as the single source of truth for my self-hosted Kubernet
 ### Application Services
 - **🗃️ PostgreSQL**: Primary database for applications
 - **⚡ Redis**: Cache and session store for applications
+- **🔐 Authentik**: SSO and identity provider for homelab authentication
 - **📊 Uptime Kuma**: Self-hosted monitoring and status pages
 - **🔔 Discord Notifications**: Automated cluster alerts and status updates
 

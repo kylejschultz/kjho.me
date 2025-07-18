@@ -37,11 +37,11 @@ spec:
       postgresql:
         host: postgresql.postgresql.svc.cluster.local
         name: authentik
-        user: authentik
+        user: postgres
         password:
           valueFrom:
             secretKeyRef:
-              name: postgresql-authentik-secrets
+              name: authentik-secret
               key: postgresql_password
       redis:
         host: redis-master.redis.svc.cluster.local

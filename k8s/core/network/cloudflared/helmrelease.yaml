@@ -68,6 +68,8 @@ spec:
 
     cloudflare:
       ingress:
+        - hostname: auth.kjho.me
+          service: http://authentik-server.authentik.svc.cluster.local:80
         - hostname: uptime.kjho.me
           service: http://uptime-kuma.uptime-kuma.svc.cluster.local:80
         - hostname: longhorn.kjho.me

@@ -7,3 +7,4 @@ resources:
   - core-database.yaml
   - core-network.yaml
   - core-observability.yaml
+  - core-authentik.yaml

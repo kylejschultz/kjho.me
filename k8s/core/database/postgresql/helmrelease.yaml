@@ -29,6 +29,8 @@ spec:
       secretKeys:
         adminPasswordKey: postgres-password
         userPasswordKey: password
+      database: "authentik"
+      username: "authentik"
     primary:
       persistence:
         enabled: true

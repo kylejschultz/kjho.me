@@ -1,0 +1,125 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: authentik
+  namespace: authentik
+spec:
+  interval: 10m
+  timeout: 10m
+  install:
+    timeout: 10m
+    remediation:
+      retries: 3
+  upgrade:
+    timeout: 10m
+    remediation:
+      retries: 3
+      remediateLastFailure: true
+  chart:
+    spec:
+      chart: authentik
+      version: "2024.8.3"
+      sourceRef:
+        kind: HelmRepository
+        name: authentik
+        namespace: flux-system
+  values:
+    global:
+      deploymentAnnotations:
+        secret.reloader.stakater.com/reload: "authentik-secret"
+
+    authentik:
+      secret_key:
+        valueFrom:
+          secretKeyRef:
+            name: authentik-secret
+            key: secret_key
+      postgresql:
+        host: postgresql.postgresql.svc.cluster.local
+        name: authentik
+        user: authentik
+        password:
+          valueFrom:
+            secretKeyRef:
+              name: authentik-secret
+              key: postgresql_password
+      redis:
+        host: redis-master.redis.svc.cluster.local
+        password:
+          valueFrom:
+            secretKeyRef:
+              name: authentik-secret
+              key: redis_password
+
+    server:
+      replicas: 2
+      resources:
+        requests:
+          cpu: 100m
+          memory: 512Mi
+        limits:
+          cpu: 500m
+          memory: 1Gi
+
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                  - authentik
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                  - server
+              topologyKey: kubernetes.io/hostname
+
+    worker:
+      replicas: 2
+      resources:
+        requests:
+          cpu: 100m
+          memory: 512Mi
+        limits:
+          cpu: 500m
+          memory: 1Gi
+
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                  - authentik
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                  - worker
+              topologyKey: kubernetes.io/hostname
+
+    service:
+      type: ClusterIP
+      port: 80
+      targetPort: 9000
+
+    volumes:
+      media:
+        enabled: true
+        storageClass: longhorn
+        size: 1Gi
+        accessModes:
+          - ReadWriteOnce
+      templates:
+        enabled: true
+        storageClass: longhorn
+        size: 1Gi
+        accessModes:
+          - ReadWriteOnce

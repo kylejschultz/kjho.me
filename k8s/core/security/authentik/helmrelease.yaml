@@ -3,8 +3,9 @@ kind: HelmRelease
 metadata:
   name: authentik
   namespace: authentik
+  annotations:
+    reconcile.fluxcd.io/requestedAt: "2025-07-20T09:43:13-0700"
 spec:
-  suspend: true
   interval: 10m
   timeout: 10m
   install:
@@ -19,7 +20,7 @@ spec:
   chart:
     spec:
       chart: authentik
-      version: '2024.6.3'
+      version: '2025.6.3'
       sourceRef:
         kind: HelmRepository
         name: authentik

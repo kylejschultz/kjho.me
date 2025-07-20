@@ -4,6 +4,7 @@ metadata:
   name: authentik
   namespace: authentik
 spec:
+  suspend: true
   interval: 10m
   timeout: 10m
   install:

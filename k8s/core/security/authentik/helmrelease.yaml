@@ -62,3 +62,5 @@ spec:
     # Use external PostgreSQL instead of bundled one
     postgresql:
       enabled: false
+      auth:
+        password: "dummy-password-not-used"

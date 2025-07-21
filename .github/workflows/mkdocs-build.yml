@@ -1,0 +1,35 @@
+name: Build MkDocs site
+
+on:
+  push:
+    branches: [ docs ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. grab your code
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      # 2. install Python
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      # 3. install MkDocs + theme
+      - run: pip install mkdocs mkdocs-material
+
+      # 4. build into docs/html
+      - run: mkdocs build --clean
+
+      # 5. commit the output folder
+      - name: Commit built site
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: github-actions
+          author_email: github-actions@github.com
+          message: "chore: rebuild MkDocs site"
+          add: docs/html

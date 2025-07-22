@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="https://github.com/kylejschultz/kjho.me/raw/docs/assets/images/logo_transparent.png" alt="KJHome Logo" width="200" />
+</div>
+
 # KJHome - Self-Hosted Kubernetes Homelab Reference
 
 A comprehensive reference for managing and maintaining the self-hosted Kubernetes homelab. Includes setup documentation, configuration details, and recreation steps for all services.
@@ -14,8 +18,10 @@ A comprehensive reference for managing and maintaining the self-hosted Kubernete
 
 ### Hardware
 - **Cluster**: 3x Intel NUCs (nuc1, nuc2, nuc3) + 1x Worker VM (nucx)
-- **Storage**: Longhorn distributed block storage
-- **Networking**: Cloudflare Tunnels for secure ingress
+- **Storage**:
+    - **Longhorn**: Distributed block storage
+        - *NUCs*: mount portion of local disks
+        - *Worker VM*: mount large SSD volumes from host
 
 ### Core Technologies
 - **GitOps**: Flux CD for all deployments
@@ -23,6 +29,7 @@ A comprehensive reference for managing and maintaining the self-hosted Kubernete
 - **Secrets Management**: 1Password Operator
 - **Authentication**: Authentik with Discord OAuth
 - **Monitoring**: Discord webhooks, UptimeKuma
+- **Networking**: Cloudflare Tunnels for secure ingress
 
 ### Key Services
 - **PostgreSQL & Redis**: Shared databases

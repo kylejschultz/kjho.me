@@ -1,9 +1,9 @@
 site_name: KJHome Homelab Docs
-docs_dir: docs/src
-site_dir: docs/html
+docs_dir: docs-src
+site_dir: docs
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
   # add other pages here as needed
 theme:
-  name: material
+  name: readthedocs

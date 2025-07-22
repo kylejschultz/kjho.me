@@ -3,6 +3,10 @@ name: Build MkDocs site
 on:
   push:
     branches: [ docs ]
+    paths:
+      - 'docs-src/**'
+      - 'mkdocs.yml'
+      - 'CNAME'
   workflow_dispatch:
 
 jobs:
@@ -19,8 +23,8 @@ jobs:
         with:
           python-version: '3.x'
 
-      # 3. install MkDocs + theme
-      - run: pip install mkdocs mkdocs-material
+      # 3. install MkDocs + theme and plugins
+      - run: pip install mkdocs mkdocs-material pymdownx-extension mkdocs-git-revision-date-localized-plugin
 
       # 4. build the site
       - run: mkdocs build --clean

@@ -1,9 +1,39 @@
 site_name: KJHome Homelab Docs
+site_url: https://docs.kjho.me
 docs_dir: docs-src
 site_dir: docs
+
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
-  # add other pages here as needed
+  - Authentication:
+    - Authentik Setup: authentication/authentik-setup.md
+  - Infrastructure:
+    - GitOps Workflow: infrastructure/gitops-workflow.md
+    - Service Directory: infrastructure/service-directory.md
+  - Troubleshooting: troubleshooting.md
+
 theme:
   name: readthedocs
+  highlightjs: true
+  hljs_languages:
+    - yaml
+    - bash
+    - dockerfile
+    - json
+
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.details
+
+plugins:
+  - search
+  - git-revision-date-localized:
+      type: date

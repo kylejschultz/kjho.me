@@ -22,8 +22,11 @@ jobs:
       # 3. install MkDocs + theme
       - run: pip install mkdocs mkdocs-material
 
-      # 4. build into docs/html
+      # 4. build the site
       - run: mkdocs build --clean
+
+      # 4.5. copy CNAME file to docs folder for custom domain
+      - run: cp CNAME docs/CNAME
 
       # 5. commit the output folder
       - name: Commit built site

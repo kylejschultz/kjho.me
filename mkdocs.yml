@@ -6,11 +6,22 @@ site_dir: docs
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
-  - Authentication:
-    - Authentik Setup: authentication/authentik-setup.md
   - Infrastructure:
     - GitOps Workflow: infrastructure/gitops-workflow.md
     - Service Directory: infrastructure/service-directory.md
+  - Services:
+    - Security:
+      - Authentik: services/security/authentik-setup.md
+    - Networking:
+      - Cloudflare Tunnel: services/networking/cloudflare-tunnel.md
+      - External-DNS: services/networking/external-dns.md
+    - Storage:
+      - Longhorn: services/storage/longhorn.md
+    - Database:
+      - PostgreSQL: services/database/postgresql.md
+      - Redis: services/database/redis.md
+    - Monitoring:
+      - Uptime Kuma: services/monitoring/uptime-kuma.md
   - Troubleshooting: troubleshooting.md
 
 theme:

@@ -53,7 +53,6 @@ theme:
     - navigation.expand
     - navigation.path
     - navigation.top
-    - toc.integrate
     - search.suggest
     - search.highlight
     - search.share
@@ -73,3 +72,6 @@ markdown_extensions:
 
 plugins:
   - search
+
+extra:
+  generator: false

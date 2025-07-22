@@ -25,14 +25,33 @@ nav:
   - Troubleshooting: troubleshooting.md
 
 theme:
-  name: dracula
-  # Dracula theme customization options:
-  highlightjs: true        # Enable syntax highlighting with Dracula colors
-  nav_style: dark         # Dark navigation bar
+  name: swan
+  # SWAN theme configuration (based on Material for MkDocs)
   logo: https://github.com/kylejschultz/kjho.me/raw/docs/assets/images/logo_transparent.png
-  # Additional options available:
-  # favicon: path/to/favicon.ico
-  include_search: true    # Include search functionality
+  palette:
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.highlight
+    - search.share
+    - content.code.copy
 markdown_extensions:
   - admonition
   - pymdownx.details

@@ -7,6 +7,7 @@ on:
       - 'docs-src/**'
       - 'mkdocs.yml'
       - 'CNAME'
+      - '.github/workflows/mkdocs-build.yml'
   workflow_dispatch:
 
 # Set permissions for GitHub Pages deployment

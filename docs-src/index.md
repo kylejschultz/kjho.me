@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://github.com/kylejschultz/kjho.me/raw/docs/assets/images/logo_transparent.png" alt="KJHome Logo" width="200" border="0"/>
+  <img src="https://github.com/kylejschultz/kjho.me/raw/docs/assets/images/logo_transparent.png" alt="KJHome Logo" width="200" style="border: none; box-shadow: none; background: transparent;" />
 </div>
 
 # KJHome - Self-Hosted Kubernetes Homelab Docs

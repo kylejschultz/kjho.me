@@ -24,7 +24,7 @@ jobs:
           python-version: '3.x'
 
       # 3. install MkDocs + Material theme and plugins
-      - run: pip install mkdocs mkdocs-material pymdownx-extension
+      - run: pip install mkdocs mkdocs-material pymdown-extensions
 
       # 4. build the site
       - run: mkdocs build --clean

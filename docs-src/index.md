@@ -13,7 +13,7 @@ A comprehensive reference for managing and maintaining the self-hosted Kubernete
 ## 🏗️ Infrastructure Overview
 
 ### Hardware
-- **Cluster**: 4x Intel NUCs (lognuc1, lognuc2, lognuc3, lognucx)
+- **Cluster**: 3x Intel NUCs (nuc1, nuc2, nuc3) + 1x Worker VM (nucx)
 - **Storage**: Longhorn distributed block storage
 - **Networking**: Cloudflare Tunnels for secure ingress
 

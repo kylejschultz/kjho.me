@@ -167,12 +167,14 @@ flux resume kustomization core-database
 ### Development Workflow
 
 **For Infrastructure Changes:**
+
 1. Create feature branch for testing
 2. Test changes in development environment
 3. Create pull request for review
 4. Merge to `main` for automatic deployment
 
 **For Application Updates:**
+
 1. Update chart version or values in HelmRelease
 2. Commit changes to trigger deployment
 3. Monitor deployment via Discord notifications

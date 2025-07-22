@@ -5,12 +5,14 @@ This homelab is managed using GitOps principles with Flux CD, ensuring all infra
 ## Overview
 
 **GitOps Philosophy:**
+
 - Git is the single source of truth for all cluster configuration
 - All changes flow through Git commits and pull requests
 - Flux continuously reconciles cluster state with Git repository
 - Manual `kubectl` commands are avoided in favor of declarative manifests
 
 **Key Components:**
+
 - **Flux CD**: GitOps operator managing deployments
 - **Helm**: Package manager for applications
 - **Kustomize**: Configuration management and patching
@@ -45,6 +47,7 @@ Flux monitors this Git repository for changes and applies them to the cluster:
 📋 [View Git Sync Configuration](https://github.com/kylejschultz/kjho.me/blob/main/k8s/orchestration/flux-system/gotk-sync.yaml)
 
 **Key Settings:**
+
 - **Repository**: https://github.com/kylejschultz/kjho.me
 - **Branch**: `main`
 - **Interval**: 1 minute reconciliation
@@ -107,6 +110,7 @@ spec:
 Secrets are stored in 1Password vault and synchronized to Kubernetes:
 
 **OnePasswordItem Resources:**
+
 - Define secret mappings from 1Password vault
 - Sync credentials, API keys, certificates
 - Automatic secret rotation and updates

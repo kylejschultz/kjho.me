@@ -9,19 +9,21 @@ nav:
   - Infrastructure:
     - GitOps Workflow: infrastructure/gitops-workflow.md
     - Service Directory: infrastructure/service-directory.md
-  - Services:
+  - Core:
     - Security:
-      - Authentik: services/security/authentik-setup.md
+      - Authentik: core/security/authentik-setup.md
     - Networking:
-      - Cloudflare Tunnel: services/networking/cloudflare-tunnel.md
-      - External-DNS: services/networking/external-dns.md
+      - Cloudflare Tunnel: core/networking/cloudflare-tunnel.md
+      - External-DNS: core/networking/external-dns.md
     - Storage:
-      - Longhorn: services/storage/longhorn.md
+      - Longhorn: core/storage/longhorn.md
     - Database:
-      - PostgreSQL: services/database/postgresql.md
-      - Redis: services/database/redis.md
-    - Monitoring:
-      - Uptime Kuma: services/monitoring/uptime-kuma.md
+      - PostgreSQL: core/database/postgresql.md
+      - Redis: core/database/redis.md
+    - Observability:
+      - Uptime Kuma: core/observability/uptime-kuma.md
+  # - Apps:
+    # Future non-core applications will go here
   - Troubleshooting: troubleshooting.md
 
 theme:

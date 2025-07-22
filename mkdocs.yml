@@ -2,6 +2,7 @@ site_name: KJHome Homelab Docs
 site_url: https://docs.kjho.me
 docs_dir: docs-src
 site_dir: docs
+repo_url: https://github.com/kylejschultz/kjho.me
 
 nav:
   - Home: index.md
@@ -27,6 +28,8 @@ theme:
   name: swan
   # SWAN theme configuration (based on Material for MkDocs)
   logo: https://github.com/kylejschultz/kjho.me/raw/docs/assets/images/logo_transparent.png
+  icon:
+    repo: fontawesome/brands/github
   palette:
     # Palette toggle for dark mode
     - media: "(prefers-color-scheme: dark)"
@@ -45,9 +48,13 @@ theme:
         icon: material/brightness-7
         name: Switch to dark mode
   features:
-    - navigation.tabs
+    - navigation.instant
     - navigation.sections
+    - navigation.expand
+    - navigation.path
     - navigation.top
+    - toc.integrate
+    - search.suggest
     - search.highlight
     - search.share
     - content.code.copy

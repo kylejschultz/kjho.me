@@ -1,10 +1,10 @@
 <div align="center">
-  <img src="https://github.com/kylejschultz/kjho.me/raw/docs/assets/images/logo_transparent.png" alt="KJHome Logo" width="200" />
+  <img src="https://github.com/kylejschultz/kjho.me/raw/docs/assets/images/logo_transparent.png" alt="KJHome Logo" width="200" border="0"/>
 </div>
 
-# KJHome - Self-Hosted Kubernetes Homelab Reference
+# KJHome - Self-Hosted Kubernetes Homelab Docs
 
-A comprehensive reference for managing and maintaining the self-hosted Kubernetes homelab. Includes setup documentation, configuration details, and recreation steps for all services.
+A reference guide for managing and maintaining my self-hosted Kubernetes homelab, providing a centralized place for documentation processes, workflows, nuances, and quick reference troubleshooting steps.
 
 ## 📋 Documentation Index
 

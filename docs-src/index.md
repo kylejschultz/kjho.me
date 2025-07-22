@@ -43,6 +43,41 @@ A reference guide for managing and maintaining my self-hosted Kubernetes homelab
 - **UptimeKuma**: https://uptime.kjho.me
 - **Longhorn**: https://longhorn.kjho.me
 
+## 🚀 Getting Started
+
+For recreating or understanding this setup:
+
+1. Review the [Infrastructure Overview](infrastructure/gitops-workflow.md) for architecture insights
+2. Understand [GitOps Workflow](infrastructure/gitops-workflow.md) for deployment methods
+3. Examine [Authentik Configuration](services/security/authentik-setup.md) for authentication setup
+4. Refer to the [Service Directory](infrastructure/service-directory.md) for application configurations
+
+### 🎯 Design Principles
+
+Adhering to these principles ensures a clean and effective homelab:
+
+- **GitOps-first**: Changes via Git, minimizing manual commands
+- **Declarative**: Define infrastructure and apps in YAML
+- **Automated**: Use Flux for deployments and updates
+- **Secure**: Store secrets in 1Password
+- **Minimal**: Simplify deployment manifests
+
+### 📁 Repository Structure
+
+```
+k8s/
+├── orchestration/
+│   ├── flux-system/          # Flux CD configuration
+│   └── foundational/         # Base infrastructure
+├── core/
+│   ├── data/                 # Databases
+│   ├── security/             # Authentication setups
+│   ├── storage/              # Longhorn settings
+│   └── network/              # Networking setups
+└── apps/
+    └── monitoring/           # Monitoring applications
+```
+
 ---
 
 *Documentation last updated 7/21/25*

@@ -21,13 +21,32 @@ spec:
     remediation:
       retries: 3
   values:
-    # Environment variables for token only
+    # Environment variables for Discord
     env:
       - name: DISCORD_BOT_TOKEN
         valueFrom:
           secretKeyRef:
             name: botkube-discord-secret
             key: bot_token
+      - name: DISCORD_BOT_ID
+        valueFrom:
+          secretKeyRef:
+            name: botkube-discord-secret
+            key: bot_id
+      - name: DISCORD_GUILD_ID
+        valueFrom:
+          secretKeyRef:
+            name: botkube-discord-secret
+            key: guild_id
+
+    # Basic Discord communication
+    communications:
+      default-group:
+        discord:
+          enabled: true
+          token: "{{ .Env.DISCORD_BOT_TOKEN }}"
+          botID: "{{ .Env.DISCORD_BOT_ID }}"
+          server: "{{ .Env.DISCORD_GUILD_ID }}"
 
     # Analytics and settings
     analytics:

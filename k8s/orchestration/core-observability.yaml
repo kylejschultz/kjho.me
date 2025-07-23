@@ -18,5 +18,6 @@ spec:
   postBuild:
     substituteFrom:
       - kind: Secret
-        name: botkube-discord-secret-flux
+        name: botkube-discord-secret
+        namespace: observability
         optional: false

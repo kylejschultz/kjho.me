@@ -21,40 +21,17 @@ spec:
     remediation:
       retries: 3
   values:
-    # Environment variables for Discord credentials
-    extraEnv:
-      - name: DISCORD_BOT_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: botkube-discord-secret
-            key: bot_token
-      - name: DISCORD_BOT_ID
-        valueFrom:
-          secretKeyRef:
-            name: botkube-discord-secret
-            key: bot_id
-      - name: DISCORD_GUILD_ID
-        valueFrom:
-          secretKeyRef:
-            name: botkube-discord-secret
-            key: guild_id
-      - name: DISCORD_GENERAL_CHANNEL_ID
-        valueFrom:
-          secretKeyRef:
-            name: botkube-discord-secret
-            key: general_channel_id
-
-    # Discord communication configuration
+    # Discord communication configuration with Flux variable substitution
     communications:
       default-group:
         discord:
           enabled: true
-          token: "{{ .Env.DISCORD_BOT_TOKEN }}"
-          botID: "{{ .Env.DISCORD_BOT_ID }}"
-          guildID: "{{ .Env.DISCORD_GUILD_ID }}"
+          token: "${bot_token}"
+          botID: "${bot_id}"
+          guildID: "${guild_id}"
           channels:
             default:
-              id: "{{ .Env.DISCORD_GENERAL_CHANNEL_ID }}"
+              id: "${general_channel_id}"
               bindings:
                 sources:
                   - critical-events

@@ -38,23 +38,8 @@ spec:
           secretKeyRef:
             name: botkube-discord-secret
             key: guild_id
-      - name: DISCORD_CRITICAL_CHANNEL_ID
-        valueFrom:
-          secretKeyRef:
-            name: botkube-discord-secret
-            key: critical_channel_id
-      - name: DISCORD_NETWORK_CHANNEL_ID
-        valueFrom:
-          secretKeyRef:
-            name: botkube-discord-secret
-            key: network_channel_id
-      - name: DISCORD_GENERAL_CHANNEL_ID
-        valueFrom:
-          secretKeyRef:
-            name: botkube-discord-secret
-            key: general_channel_id
 
-    # Discord communication with all channels
+    # Discord communication
     communications:
       default-group:
         discord:
@@ -64,32 +49,11 @@ spec:
           guildID: "{{ .Env.DISCORD_GUILD_ID }}"
           id: "{{ .Env.DISCORD_BOT_ID }}"
           channels:
-            # Critical alerts channel
-            critical:
-              name: k8s-critical
-              id: "{{ .Env.DISCORD_CRITICAL_CHANNEL_ID }}"
+            default:
+              id: "{{ .Env.DISCORD_GUILD_ID }}"
               bindings:
                 sources:
-                  - critical-events
-                  - storage-events
-              notification:
-                disabled: false
-            # Network alerts channel
-            network:
-              name: k8s-network
-              id: "{{ .Env.DISCORD_NETWORK_CHANNEL_ID }}"
-              bindings:
-                sources:
-                  - network-events
-              notification:
-                disabled: false
-            # General monitoring channel
-            general:
-              name: k8s-general
-              id: "{{ .Env.DISCORD_GENERAL_CHANNEL_ID }}"
-              bindings:
-                sources:
-                  - general-events
+                  - k8s-events
               notification:
                 disabled: false
 

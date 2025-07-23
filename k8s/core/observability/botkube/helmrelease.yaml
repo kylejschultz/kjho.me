@@ -38,6 +38,21 @@ spec:
           secretKeyRef:
             name: botkube-discord-secret
             key: guild_id
+      - name: DISCORD_CRITICAL_CHANNEL_ID
+        valueFrom:
+          secretKeyRef:
+            name: botkube-discord-secret
+            key: critical_channel_id
+      - name: DISCORD_NETWORK_CHANNEL_ID
+        valueFrom:
+          secretKeyRef:
+            name: botkube-discord-secret
+            key: network_channel_id
+      - name: DISCORD_GENERAL_CHANNEL_ID
+        valueFrom:
+          secretKeyRef:
+            name: botkube-discord-secret
+            key: general_channel_id
 
     # Discord communication with all channels
     communications:
@@ -46,13 +61,12 @@ spec:
           enabled: true
           token: "{{ .Env.DISCORD_BOT_TOKEN }}"
           botID: "{{ .Env.DISCORD_BOT_ID }}"
-          server: "{{ .Env.DISCORD_GUILD_ID }}"
-          # Required ID field
-          id: "{{ .Env.DISCORD_GUILD_ID }}"
+          guildID: "{{ .Env.DISCORD_GUILD_ID }}"
           channels:
             # Critical alerts channel
             critical:
               name: k8s-critical
+              id: "{{ .Env.DISCORD_CRITICAL_CHANNEL_ID }}"
               bindings:
                 sources:
                   - critical-events
@@ -62,6 +76,7 @@ spec:
             # Network alerts channel
             network:
               name: k8s-network
+              id: "{{ .Env.DISCORD_NETWORK_CHANNEL_ID }}"
               bindings:
                 sources:
                   - network-events
@@ -70,6 +85,7 @@ spec:
             # General monitoring channel
             general:
               name: k8s-general
+              id: "{{ .Env.DISCORD_GENERAL_CHANNEL_ID }}"
               bindings:
                 sources:
                   - general-events
@@ -87,7 +103,8 @@ spec:
             include:
               - "longhorn-system"
               - "authentik"
-              - "database"
+              - "postgresql"
+              - "redis"
               - "flux-system"
           events:
             - type: error
@@ -129,7 +146,8 @@ spec:
           namespaces:
             include:
               - "kube-system"
-              - "network"
+              - "cloudflared"
+              - "external-dns"
           events:
             - type: error
             - type: warning

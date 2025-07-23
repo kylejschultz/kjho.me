@@ -27,11 +27,11 @@ spec:
         discord:
           enabled: true
           token: "${bot_token}"
-          botID: "${bot_id}"
-          guildID: "${guild_id}"
+          botID: '${bot_id}'
+          guildID: '${guild_id}'
           channels:
             default:
-              id: "${general_channel_id}"
+              id: '${general_channel_id}'
               bindings:
                 sources:
                   - critical-events

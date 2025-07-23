@@ -3,5 +3,4 @@ kind: Kustomization
 resources:
 - gotk-components.yaml
 - gotk-sync.yaml
-- botkube-discord-secret.yaml
 - flux-notifications/

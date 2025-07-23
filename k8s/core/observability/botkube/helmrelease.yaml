@@ -267,7 +267,7 @@ spec:
           restrictAccess: true
           commands:
             - verbs: ["api-resources", "api-versions", "cluster-info", "describe", "explain", "get", "logs", "top"]
-              resources: ["deployments", "pods", "namespaces", "daemonsets", "statefulsets", "storageclasses", "nodes", "persistentvolumes", "persistentvolumeclaims", "services", "ingresses", "events"]
+              resources: ["deployments", "pods", "namespaces", "daemonsets", "statefulsets", "storageclasses", "nodes", "persistentvolumes", "persistentvolumeclaims", "services", "ingresses", "events", "*"]
 
     # Analytics and settings
     analytics:

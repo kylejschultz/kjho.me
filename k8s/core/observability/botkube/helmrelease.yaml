@@ -39,49 +39,28 @@ spec:
             name: botkube-discord-secret
             key: guild_id
 
-    # Communication settings
+    # Communication settings - simplified for testing
     communications:
       default-group:
         discord:
           enabled: true
           channels:
-            # Critical alerts channel - for immediate attention
+            # Single test channel
             critical:
               name: k8s-critical
               bindings:
-                executors:
-                  - kubectl-read-only
                 sources:
-                  - critical-events
-                  - storage-events
-              notification:
-                disabled: false
-            # Network alerts channel - for network and connectivity issues
-            network:
-              name: k8s-network
-              bindings:
-                sources:
-                  - network-events
-              notification:
-                disabled: false
-            # General monitoring channel - for informational events
-            general:
-              name: k8s-general
-              bindings:
-                sources:
-                  - general-events
-                  - flux-events
+                  - k8s-events
               notification:
                 disabled: false
           token: "{{ .Env.DISCORD_BOT_TOKEN }}"
           botID: "{{ .Env.DISCORD_BOT_ID }}"
           server: "{{ .Env.DISCORD_GUILD_ID }}"
 
-    # Source configurations
+    # Simplified source configuration
     sources:
-      # Critical events - pods failing, nodes down, storage issues
-      critical-events:
-        displayName: "Critical Infrastructure Events"
+      k8s-events:
+        displayName: "Kubernetes Events"
         kubernetes:
           enabled: true
           namespaces:
@@ -89,168 +68,17 @@ spec:
               - "longhorn-system"
               - "authentik"
               - "database"
-              - "flux-system"
-              - "kube-system"
           events:
             - type: error
             - type: warning
           resources:
             - type: v1/pods
-              namespaces:
-                include:
-                  - "longhorn-system"
-                  - "authentik"
-                  - "database"
               events:
                 - create
-                - delete
-                - error
-              updateSetting:
-                includeDiff: false
-                fields:
-                  - "status.phase"
-                  - "status.containerStatuses[*].ready"
-                  - "status.containerStatuses[*].restartCount"
-            - type: v1/persistentvolume
-              events:
-                - create
-                - delete
-                - error
-            - type: v1/persistentvolumeclaim
-              events:
-                - create
-                - delete
-                - error
-            - type: v1/nodes
-              events:
-                - create
-                - delete
-                - error
-              updateSetting:
-                includeDiff: false
-                fields:
-                  - "status.conditions[*].type"
-                  - "status.conditions[*].status"
-
-      # Storage-specific events for Longhorn monitoring
-      storage-events:
-        displayName: "Storage & Longhorn Events"
-        kubernetes:
-          enabled: true
-          namespaces:
-            include:
-              - "longhorn-system"
-          resources:
-            - type: longhorn.io/volume
-              events:
-                - create
-                - update
-                - delete
-                - error
-            - type: longhorn.io/replica
-              events:
-                - create
-                - update
-                - delete
-                - error
-            - type: longhorn.io/engine
-              events:
-                - create
-                - update
                 - delete
                 - error
 
-      # Network events for connectivity issues
-      network-events:
-        displayName: "Network & Connectivity Events"
-        kubernetes:
-          enabled: true
-          namespaces:
-            include:
-              - "kube-system"
-              - "network"
-          resources:
-            - type: v1/services
-              events:
-                - create
-                - delete
-                - error
-            - type: networking.k8s.io/v1/ingresses
-              events:
-                - create
-                - update
-                - delete
-                - error
-            - type: v1/endpoints
-              events:
-                - create
-                - update
-                - delete
-                - error
-
-      # General monitoring events
-      general-events:
-        displayName: "General Cluster Events"
-        kubernetes:
-          enabled: true
-          namespaces:
-            include:
-              - "default"
-              - "observability"
-              - "security"
-          events:
-            - type: normal
-            - type: warning
-          resources:
-            - type: v1/pods
-              events:
-                - create
-                - delete
-              updateSetting:
-                includeDiff: false
-                fields:
-                  - "status.phase"
-            - type: apps/v1/deployments
-              events:
-                - create
-                - update
-                - delete
-                - error
-              updateSetting:
-                includeDiff: false
-                fields:
-                  - "status.replicas"
-                  - "status.readyReplicas"
-
-      # Flux events integration (duplicate from Flux alerts but with more detail)
-      flux-events:
-        displayName: "GitOps & Flux Events"
-        kubernetes:
-          enabled: true
-          namespaces:
-            include:
-              - "flux-system"
-          resources:
-            - type: source.toolkit.fluxcd.io/v1beta2/gitrepositories
-              events:
-                - create
-                - update
-                - delete
-                - error
-            - type: kustomize.toolkit.fluxcd.io/v1beta2/kustomizations
-              events:
-                - create
-                - update
-                - delete
-                - error
-            - type: helm.toolkit.fluxcd.io/v2beta1/helmreleases
-              events:
-                - create
-                - update
-                - delete
-                - error
-
-    # Executor configurations for interactive commands
+    # Simplified executor configuration for testing
     executors:
       kubectl-read-only:
         displayName: "Kubectl Read Only"
@@ -261,13 +89,9 @@ spec:
               - "longhorn-system"
               - "authentik"
               - "database"
-              - "flux-system"
-              - "kube-system"
-              - "observability"
-          restrictAccess: true
           commands:
-            - verbs: ["api-resources", "api-versions", "cluster-info", "describe", "explain", "get", "logs", "top"]
-              resources: ["deployments", "pods", "namespaces", "daemonsets", "statefulsets", "storageclasses", "nodes", "persistentvolumes", "persistentvolumeclaims", "services", "ingresses", "events", "*"]
+            verbs: ["get", "describe", "logs"]
+            resources: ["pods", "deployments", "services"]
 
     # Analytics and settings
     analytics:
@@ -303,9 +127,3 @@ spec:
     # Service account with minimal required permissions
     serviceAccount:
       create: true
-      annotations: {}
-
-    # Add node selector for better scheduling
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}

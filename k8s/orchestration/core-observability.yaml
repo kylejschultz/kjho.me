@@ -15,8 +15,3 @@ spec:
   wait: true
   dependsOn:
     - name: core-network
-  postBuild:
-    substituteFrom:
-      - kind: Secret
-        name: botkube-discord-secret
-        optional: false

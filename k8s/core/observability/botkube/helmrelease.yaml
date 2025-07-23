@@ -47,6 +47,8 @@ spec:
           token: "{{ .Env.DISCORD_BOT_TOKEN }}"
           botID: "{{ .Env.DISCORD_BOT_ID }}"
           server: "{{ .Env.DISCORD_GUILD_ID }}"
+          # Required ID field
+          id: "{{ .Env.DISCORD_GUILD_ID }}"
           channels:
             # Critical alerts channel
             critical:
@@ -79,7 +81,7 @@ spec:
       # Critical infrastructure events
       critical-events:
         displayName: "Critical Infrastructure Events"
-        kubernetes:
+        botkube/kubernetes:
           enabled: true
           namespaces:
             include:
@@ -110,7 +112,7 @@ spec:
       # Storage and Longhorn events
       storage-events:
         displayName: "Storage Events"
-        kubernetes:
+        botkube/kubernetes:
           enabled: true
           namespaces:
             include:
@@ -122,7 +124,7 @@ spec:
       # Network connectivity events
       network-events:
         displayName: "Network Events"
-        kubernetes:
+        botkube/kubernetes:
           enabled: true
           namespaces:
             include:
@@ -147,7 +149,7 @@ spec:
       # General cluster events
       general-events:
         displayName: "General Events"
-        kubernetes:
+        botkube/kubernetes:
           enabled: true
           namespaces:
             include:

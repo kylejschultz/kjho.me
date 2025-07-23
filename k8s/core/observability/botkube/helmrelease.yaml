@@ -62,6 +62,7 @@ spec:
           token: "{{ .Env.DISCORD_BOT_TOKEN }}"
           botID: "{{ .Env.DISCORD_BOT_ID }}"
           guildID: "{{ .Env.DISCORD_GUILD_ID }}"
+          id: "{{ .Env.DISCORD_BOT_ID }}"
           channels:
             # Critical alerts channel
             critical:

@@ -58,15 +58,15 @@ spec:
           token:
             secretKeyRef:
               name: botkube-discord-secret
-              key: discord_bot_token
+              key: bot_token
           botID:
             secretKeyRef:
               name: botkube-discord-secret
-              key: discord_bot_id
+              key: bot_id
           server:
             secretKeyRef:
               name: botkube-discord-secret
-              key: discord_guild_id
+              key: guild_id
 
     # Source configurations
     sources:

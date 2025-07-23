@@ -21,77 +21,13 @@ spec:
     remediation:
       retries: 3
   values:
-    # Environment variables for Discord integration
+    # Environment variables for token only
     env:
       - name: DISCORD_BOT_TOKEN
         valueFrom:
           secretKeyRef:
             name: botkube-discord-secret
             key: bot_token
-      - name: DISCORD_BOT_ID
-        valueFrom:
-          secretKeyRef:
-            name: botkube-discord-secret
-            key: bot_id
-      - name: DISCORD_GUILD_ID
-        valueFrom:
-          secretKeyRef:
-            name: botkube-discord-secret
-            key: guild_id
-
-    # Communication settings - simplified for testing
-    communications:
-      default-group:
-        discord:
-          enabled: true
-          channels:
-            # Single test channel
-            critical:
-              name: k8s-critical
-              bindings:
-                sources:
-                  - k8s-events
-              notification:
-                disabled: false
-          token: "{{ .Env.DISCORD_BOT_TOKEN }}"
-          botID: "{{ .Env.DISCORD_BOT_ID }}"
-          server: "{{ .Env.DISCORD_GUILD_ID }}"
-
-    # Simplified source configuration
-    sources:
-      k8s-events:
-        displayName: "Kubernetes Events"
-        kubernetes:
-          enabled: true
-          namespaces:
-            include:
-              - "longhorn-system"
-              - "authentik"
-              - "database"
-          events:
-            - type: error
-            - type: warning
-          resources:
-            - type: v1/pods
-              events:
-                - create
-                - delete
-                - error
-
-    # Simplified executor configuration for testing
-    executors:
-      kubectl-read-only:
-        displayName: "Kubectl Read Only"
-        kubectl:
-          enabled: true
-          namespaces:
-            include:
-              - "longhorn-system"
-              - "authentik"
-              - "database"
-          commands:
-            verbs: ["get", "describe", "logs"]
-            resources: ["pods", "deployments", "services"]
 
     # Analytics and settings
     analytics:
@@ -127,3 +63,9 @@ spec:
     # Service account with minimal required permissions
     serviceAccount:
       create: true
+      annotations: {}
+
+    # Add node selector for better scheduling
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}

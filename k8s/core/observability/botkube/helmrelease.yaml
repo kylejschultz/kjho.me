@@ -38,6 +38,11 @@ spec:
           secretKeyRef:
             name: botkube-discord-secret
             key: guild_id
+      - name: DISCORD_GENERAL_CHANNEL_ID
+        valueFrom:
+          secretKeyRef:
+            name: botkube-discord-secret
+            key: general_channel_id
 
     # Discord communication
     communications:
@@ -50,7 +55,7 @@ spec:
           id: "{{ .Env.DISCORD_BOT_ID }}"
           channels:
             default:
-              id: "{{ .Env.DISCORD_GUILD_ID }}"
+              id: "{{ .Env.DISCORD_GENERAL_CHANNEL_ID }}"
               bindings:
                 sources:
                   - critical-events

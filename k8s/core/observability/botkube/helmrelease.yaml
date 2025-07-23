@@ -53,7 +53,10 @@ spec:
               id: "{{ .Env.DISCORD_GUILD_ID }}"
               bindings:
                 sources:
-                  - k8s-events
+                  - critical-events
+                  - storage-events
+                  - network-events
+                  - general-events
               notification:
                 disabled: false
 

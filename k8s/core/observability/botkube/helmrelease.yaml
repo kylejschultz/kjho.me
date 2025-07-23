@@ -39,7 +39,7 @@ spec:
             name: botkube-discord-secret
             key: guild_id
 
-    # Basic Discord communication
+    # Discord communication with all channels
     communications:
       default-group:
         discord:
@@ -47,6 +47,125 @@ spec:
           token: "{{ .Env.DISCORD_BOT_TOKEN }}"
           botID: "{{ .Env.DISCORD_BOT_ID }}"
           server: "{{ .Env.DISCORD_GUILD_ID }}"
+          channels:
+            # Critical alerts channel
+            critical:
+              name: k8s-critical
+              bindings:
+                sources:
+                  - critical-events
+                  - storage-events
+              notification:
+                disabled: false
+            # Network alerts channel
+            network:
+              name: k8s-network
+              bindings:
+                sources:
+                  - network-events
+              notification:
+                disabled: false
+            # General monitoring channel
+            general:
+              name: k8s-general
+              bindings:
+                sources:
+                  - general-events
+              notification:
+                disabled: false
+
+    # Source configurations
+    sources:
+      # Critical infrastructure events
+      critical-events:
+        displayName: "Critical Infrastructure Events"
+        kubernetes:
+          enabled: true
+          namespaces:
+            include:
+              - "longhorn-system"
+              - "authentik"
+              - "database"
+              - "flux-system"
+          events:
+            - type: error
+            - type: warning
+          resources:
+            - type: v1/pods
+              events:
+                - create
+                - delete
+                - error
+            - type: v1/persistentvolume
+              events:
+                - create
+                - delete
+                - error
+            - type: v1/nodes
+              events:
+                - create
+                - delete
+                - error
+
+      # Storage and Longhorn events
+      storage-events:
+        displayName: "Storage Events"
+        kubernetes:
+          enabled: true
+          namespaces:
+            include:
+              - "longhorn-system"
+          events:
+            - type: error
+            - type: warning
+
+      # Network connectivity events
+      network-events:
+        displayName: "Network Events"
+        kubernetes:
+          enabled: true
+          namespaces:
+            include:
+              - "kube-system"
+              - "network"
+          events:
+            - type: error
+            - type: warning
+          resources:
+            - type: v1/services
+              events:
+                - create
+                - delete
+                - error
+            - type: v1/endpoints
+              events:
+                - create
+                - update
+                - delete
+                - error
+
+      # General cluster events
+      general-events:
+        displayName: "General Events"
+        kubernetes:
+          enabled: true
+          namespaces:
+            include:
+              - "default"
+              - "observability"
+          events:
+            - type: normal
+            - type: warning
+          resources:
+            - type: v1/pods
+              events:
+                - create
+                - delete
+            - type: apps/v1/deployments
+              events:
+                - create
+                - update
+                - delete
 
     # Analytics and settings
     analytics:

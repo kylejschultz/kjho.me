@@ -1,0 +1,62 @@
+name: Build and Deploy MkDocs
+
+on:
+  push:
+    branches: [ docs ]
+    paths:
+      - 'docs-src/**'
+      - 'mkdocs.yml'
+      - 'CNAME'
+      - '.github/workflows/mkdocs-build.yml'
+  workflow_dispatch:
+
+# Set permissions for GitHub Pages deployment
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. grab your code
+      - uses: actions/checkout@v4
+
+      # 2. install Python
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      # 3. install MkDocs + SWAN theme and plugins
+      - run: pip install mkdocs mkdocs-swan pymdown-extensions
+
+      # 4. build the site
+      - run: mkdocs build --clean
+
+      # 4.5. copy CNAME file to docs folder for custom domain
+      - run: cp CNAME docs/CNAME
+
+      # 5. Upload artifact for Pages deployment
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'docs'
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

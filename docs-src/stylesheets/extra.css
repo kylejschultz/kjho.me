@@ -1,0 +1,49 @@
+/* Custom CSS to override SWAN theme footer and branding */
+
+/* Hide SWAN footer branding completely */
+.md-footer-copyright,
+.md-footer-meta .md-footer-copyright,
+.md-footer-meta__inner .md-footer-copyright,
+footer .md-footer-copyright,
+.md-footer .md-footer-copyright {
+    display: none !important;
+}
+
+/* Hide any footer text or links mentioning SWAN/CERN */
+.md-footer-meta a[href*="swan" i],
+.md-footer-meta a[href*="cern" i],
+.md-footer a[href*="swan" i],
+.md-footer a[href*="cern" i],
+.md-footer-meta *[class*="swan" i],
+.md-footer *[class*="swan" i] {
+    display: none !important;
+}
+
+/* Hide text nodes containing SWAN */
+.md-footer-meta,
+.md-footer-copyright {
+    font-size: 0 !important;
+}
+
+/* Hide the entire footer meta section if it only contains branding */
+.md-footer-meta {
+    display: none !important;
+}
+
+/* Keep only the navigation footer if it exists */
+.md-footer-nav {
+    display: block !important;
+}
+
+/* Clean up footer appearance */
+.md-footer {
+    border-top: 1px solid var(--md-default-fg-color--lightest);
+    padding-bottom: 0 !important;
+}
+
+/* Hide "Made with Material for MkDocs" type text */
+.md-footer-meta *:contains("Material"),
+.md-footer-meta *:contains("MkDocs"),
+.md-footer-meta *:contains("SWAN") {
+    display: none !important;
+}

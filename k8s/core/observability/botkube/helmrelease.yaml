@@ -29,7 +29,7 @@ spec:
           channels:
             # Critical alerts channel - for immediate attention
             critical:
-              name: critical-alerts
+              name: k8s-critical
               bindings:
                 executors:
                   - kubectl-read-only
@@ -40,7 +40,7 @@ spec:
                 disabled: false
             # Network alerts channel - for network and connectivity issues
             network:
-              name: network-alerts
+              name: k8s-network
               bindings:
                 sources:
                   - network-events
@@ -48,7 +48,7 @@ spec:
                 disabled: false
             # General monitoring channel - for informational events
             general:
-              name: general-monitoring
+              name: k8s-general
               bindings:
                 sources:
                   - general-events

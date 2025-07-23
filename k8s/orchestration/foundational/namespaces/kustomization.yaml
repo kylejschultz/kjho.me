@@ -5,6 +5,7 @@ resources:
 - cloudflared.yaml
 - external-dns.yaml
 - longhorn-system.yaml
+- observability.yaml
 - postgresql.yaml
 - redis.yaml
 - uptime-kuma.yaml

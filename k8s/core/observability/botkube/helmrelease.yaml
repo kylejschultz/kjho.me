@@ -21,33 +21,29 @@ spec:
     remediation:
       retries: 3
   values:
-    # Discord communication with direct secret references
+    # Discord communication using secret references
     communications:
       default-group:
         discord:
           enabled: true
           token:
-            valueFrom:
-              secretKeyRef:
-                name: botkube-discord-secret
-                key: bot_token
+            secretKeyRef:
+              name: botkube-discord-secret
+              key: bot_token
           botID:
-            valueFrom:
-              secretKeyRef:
-                name: botkube-discord-secret
-                key: bot_id
+            secretKeyRef:
+              name: botkube-discord-secret
+              key: bot_id
           guildID:
-            valueFrom:
-              secretKeyRef:
-                name: botkube-discord-secret
-                key: guild_id
+            secretKeyRef:
+              name: botkube-discord-secret
+              key: guild_id
           channels:
             default:
               id:
-                valueFrom:
-                  secretKeyRef:
-                    name: botkube-discord-secret
-                    key: general_channel_id
+                secretKeyRef:
+                  name: botkube-discord-secret
+                  key: general_channel_id
               bindings:
                 sources:
                   - critical-events
